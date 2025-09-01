@@ -4,9 +4,9 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/")
-def get_users():
-    return "Hello World"
+@app.route("/api/hello")
+def hello():
+    return jsonify(message="こんにちは！Flaskからのレスポンスです。")
 
 if __name__ == "__main__":
     
