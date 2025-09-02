@@ -30,11 +30,11 @@ function Request() {
             const response = await fetch("http://localhost:5001/api/request-links", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                // body: JSON.stringify({
-                //     sender_id: 1,
-                //     amount: numericAmount,
-                //     message: message || "",
-                // }),
+                body: JSON.stringify({
+                    sender_id: 1,
+                    amount: numericAmount,
+                    message: message || "",
+                }),
             });
 
             console.log("HTTPステータス:", response.status);
