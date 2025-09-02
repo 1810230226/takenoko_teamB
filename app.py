@@ -13,15 +13,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-'''
-# ユーザー一覧取得
-@app.route("/sendmoney", methods=["GET"])
-def get_users():
-    conn = get_db_connection()
-    users = conn.execute("SELECT * FROM users").fetchall()
-    conn.close()
-    return jsonify([dict(user) for user in users])
-'''
 
 ##### 送金処理 #####
 @app.route("/api/sendmoney", methods=["POST"])
@@ -68,8 +59,6 @@ def send_money():
         conn.close()
 
 
-
-
 ##### 送信先一覧表示 #####
 @app.route("/get_user", methods=["POST"])
 def get_user():
@@ -92,21 +81,6 @@ def get_user():
         users_dict[account_number] = name
 
     cursor.close()
-
-@app.route("/api/users", methods=["POST"])
-def add_user():
-    data = request.get_json()  # React から送られるJSON
-    name = data["name"]
-    balance = data.get("balance", 0)
-    account_number = data["account_number"]
-
-    conn = get_db_connection()
-    conn.execute(
-        "INSERT INTO users (name, balance, account) VALUES (?, ?, ?)",
-        (name, balance, account_number)
-    )
-    conn.commit()
-    conn.close()
 
     return jsonify(users_dict)
 
