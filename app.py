@@ -1,12 +1,15 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sqlite3
+import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+
+DB_FILE = os.path.join(app.root_path, "takenoko.db")
 
 def get_db_connection():
-    conn = sqlite3.connect("app.db")
+    conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -22,12 +25,12 @@ def add_user():
     data = request.get_json()  # React から送られるJSON
     name = data["name"]
     balance = data.get("balance", 0)
-    account = data["account"]
+    account_number = data["account_number"]
 
     conn = get_db_connection()
     conn.execute(
         "INSERT INTO users (name, balance, account) VALUES (?, ?, ?)",
-        (name, balance, account)
+        (name, balance, account_number)
     )
     conn.commit()
     conn.close()
