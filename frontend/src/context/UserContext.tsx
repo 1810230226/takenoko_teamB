@@ -2,9 +2,10 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type User = {
-  account_number: string;
-  name: string;
-  balance: number;
+    id: number;
+    name: string;
+    account_number: string;
+    balance: number;
 };
 
 type UserContextType = {

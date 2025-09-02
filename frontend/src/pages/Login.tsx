@@ -29,12 +29,14 @@ function Login() {
             const data = await res.json();
             //setUserInfo(data); // ユーザー情報を保存
             setUser({
+                id: data.id,
                 account_number: data.account_number,
                 name: data.name,
                 balance: data.balance,
             });
-            console.log(user)
             alert(`ようこそ ${data.name} さん！ 残高: ${data.balance}円`);
+            console.log(data)
+            console.log(user)
             // ここで画面遷移
             navigate("/top");
         } catch (err) {

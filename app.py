@@ -87,7 +87,14 @@ def login():
     return jsonify(dict(user))
 
 
-
+@app.route("/api/users", methods=["GET"])
+def get_users():
+    print("okk")
+    conn = get_db_connection()
+    users = conn.execute("SELECT * FROM users").fetchall()
+    conn.close()
+    print([user for user in users])
+    return jsonify([dict(user) for user in users])
 
 
 
