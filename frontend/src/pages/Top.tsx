@@ -1,5 +1,10 @@
+import { useState } from "react";
+
 function Top() {
 
+    // DB完成後に変更
+    const balance = 100000
+    const [showBalance, setShowBalance] = useState(true);
     return (
         <>
             <div className="flex flex-col items-center justify-center w-full min-h-screen p-4 bg-orange-50">
@@ -12,19 +17,28 @@ function Top() {
                     />
 
                     {/* 名前とID */}
-                    <div className="ml-4">
+                    <div className="ml-4 space-y-4 -mt-6">
                         <p className="text-sm text-gray-500">口座番号 : 0000000</p>
-                        <p className="text-lg font-bold">田中 一郎</p>
+                        <p className="text-2xl font-bold font-sans">田中  一郎</p>
                     </div>
                 </div>
 
-                <p className="mb-2 text-left w-full max-w-md">預金残高</p>
+                <p className="mb-1 text-left w-full max-w-md ml-2">預金残高</p>
                 <p className="flex items-center justify-between w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5">
-                    <span>100,000</span>
+                <span className="flex items-baseline space-x-1">
+                    <span>
+                        {showBalance ? balance.toLocaleString() : "******"}
+                    </span>
+                    <span>円</span>
+                </span>
                     <img
-                        src="/assets/images/icons/eye-close.png"
+                        src={
+                            showBalance
+                            ? "/assets/images/icons/eye-close.png"
+                            : "/assets/images/icons/eye-open.png"}
                         alt="アイコン"
-                        className="w-6 h-6"
+                        className="w-6 h-6 cursor-pointer"
+                        onClick={() => setShowBalance(!showBalance)}
                     />
                 </p>
                 {/*
