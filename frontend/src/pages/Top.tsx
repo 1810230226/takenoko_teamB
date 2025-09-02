@@ -71,7 +71,7 @@ function Top() {
                 </p>
 */}
                 <div className="flex justify-center gap-4 mb-5 w-full max-w-md">
-                    <Link to="/recipients" className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
+                    <Link to="/recipients" state={{ excludeUserId: user?.id }} className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
                         <img
                             src="/assets/images/icons/arrow-up.png"
                             alt="送金アイコン"
