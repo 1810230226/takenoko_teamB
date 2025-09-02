@@ -36,3 +36,13 @@ def add_user():
     conn.close()
 
     return jsonify({"status": "success", "message": "ユーザーを追加しました！"})
+
+# 指定したidのユーザの情報をとる
+@app.route("/api/users/<int:user_id>", methods=["GET"])
+def get_user(user_id):
+    conn = get_db_connection()
+    user = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    conn.close()
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(dict(user))
