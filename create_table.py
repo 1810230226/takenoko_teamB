@@ -3,14 +3,30 @@ import sqlite3
 conn = sqlite3.connect("takenoko.db")
 cursor = conn.cursor()
 
+##### 送金履歴テーブル #####
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS send_histories (
+    id INTEGER PRIMARY KEY,
+    sender_num TEXT,
+    receiver_num TEXT,
+    datetime TEXT,
+    amount INTEGER,
+    message TEXT
+)
+""")
+
+##### ユーザーテーブル #####
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
-    account_number TEXT,
+    account_number INTEGER,
     name TEXT,
     balance INTEGER
 )
 """)
+
+
 
 # 6人分の初期データ
 users = [
@@ -30,5 +46,9 @@ conn.commit()
 for row in cursor.execute("SELECT * FROM users"):
     print(row)
 
+for row in cursor.execute("SELECT * FROM send_histories"):
+    print(row)
 
+
+cursor.close()
 conn.close()
