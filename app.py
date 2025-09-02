@@ -15,6 +15,7 @@ def get_db_connection():
     return conn
 
 
+
 ##### 送金処理 #####
 @app.route("/api/sendmoney", methods=["POST"])
 def send_money():
@@ -60,21 +61,29 @@ def send_money():
         conn.close()
 
 
-##### 送信先一覧表示 #####
-@app.route("/get_user", methods=["POST"])
-def get_user():
-    data = request.get_json()
-    sender_num = data.get("sender_num")
 
+
+
+@app.route("/api/login", methods=["POST"])
+def login():
+    print("aaaa")
+    data = request.get_json()
+    account_number = data.get("account_number")
+
+    print(account_number)
     conn = get_db_connection()
-    conn.execute(
-        "INSERT INTO users (name, balance, account) VALUES (?, ?, ?)",
-        (name, balance, account_number)
-    )
-    conn.commit()
+    user = conn.execute("SELECT * FROM users WHERE account_number = ?", (account_number,)).fetchone()
     conn.close()
 
-    return jsonify({"status": "success", "message": "ユーザーを追加しました！"})
+    if user is None:
+        return jsonify({"error": "口座番号が存在しません"}), 404
+
+    return jsonify(dict(user))
+
+
+
+
+
 
 # 指定したidのユーザの情報をとる
 @app.route("/api/users/<int:user_id>", methods=["GET"])
