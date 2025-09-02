@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from datetime import datetime, timedelta
 import sqlite3
 import os
 
@@ -13,15 +14,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-'''
-# ユーザー一覧取得
-@app.route("/sendmoney", methods=["GET"])
-def get_users():
-    conn = get_db_connection()
-    users = conn.execute("SELECT * FROM users").fetchall()
-    conn.close()
-    return jsonify([dict(user) for user in users])
-'''
+
 
 ##### 送金処理 #####
 @app.route("/api/sendmoney", methods=["POST"])
@@ -70,52 +63,6 @@ def send_money():
 
 
 
-##### 送信先一覧表示 #####
-@app.route("/get_user", methods=["POST"])
-def get_user():
-    data = request.get_json()
-    sender_num = data.get("sender_num")
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    users_dict = {}  # 結果を格納する辞書
-
-    for row in cursor.execute("SELECT account_number, name FROM users"):
-        account_number = row["account_number"]
-        name = row["name"]
-
-        if account_number == sender_num:
-            continue  # 除外
-
-        # 辞書に追加
-        users_dict[account_number] = name
-
-    cursor.close()
-
-@app.route("/api/users", methods=["POST"])
-def add_user():
-    data = request.get_json()  # React から送られるJSON
-    name = data["name"]
-    balance = data.get("balance", 0)
-    account_number = data["account_number"]
-
-    conn = get_db_connection()
-    conn.execute(
-        "INSERT INTO users (name, balance, account) VALUES (?, ?, ?)",
-        (name, balance, account_number)
-    )
-    conn.commit()
-    conn.close()
-
-    return jsonify(users_dict)
-
-
-
-
-
-
-
 
 @app.route("/api/login", methods=["POST"])
 def login():
@@ -138,15 +85,50 @@ def login():
 
 
 
+# 指定したidのユーザの情報をとる
+@app.route("/api/users/<int:user_id>", methods=["GET"])
+def get_user(user_id):
+    conn = get_db_connection()
+    user = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    conn.close()
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(dict(user))
+
+@app.route("/api/send_history", methods=["POST"])
+def add_send_history():
+    """
+    送金履歴を追加するAPIエンドポイント
+    """
+    try:
+        data = request.get_json()
+        server_id = data.get("server_id")
+        reciever_id = data.get("reciever_id")
+        amount = data.get("amount")
+        message = data.get("message", "")
+
+        if not all([server_id, reciever_id, amount]):
+            return jsonify({"status": "error", "message": "送金元ID, 送金先ID, 金額は必須です。"}), 400
+        
+        current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        conn = get_db_connection()
+        conn.execute(
+            "INSERT INTO send_history (server_id, reciever_id, date, amount, message) VALUES (?, ?, ?, ?, ?)",
+            (server_id, reciever_id, current_date, amount, message)
+        )
+        conn.commit()
+        conn.close()
+
+        return jsonify({"status": "success", "message": "送信履歴を追加しました！"})
+
+    except KeyError as e:
+        return jsonify({"status": "error", "message": f"必須フィールドがありません: {e}"}), 400
+    except sqlite3.Error as e:
+        return jsonify({"status": "error", "message": f"データベースエラー: {e}"}), 500
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"予期せぬエラーが発生しました: {e}"}), 500
   
   
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
-
-
-
-
-
-
-
-
