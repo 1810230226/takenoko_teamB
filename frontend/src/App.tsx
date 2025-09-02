@@ -5,6 +5,7 @@ import Recipients from "./pages/Recipients";
 import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
+import Login from "./pages/Login";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                 <Route path="/amount" element={<Amount />} />
                 <Route path="/complete" element={<Complete />} />
                 <Route path="/request" element={<Request />} />
+                <Route path="/" element={<Login />} />
             </Routes>
         </BrowserRouter>
     );
