@@ -59,22 +59,12 @@ def send_money():
         cursor.close()
         conn.close()
 
-
-##### 送信先一覧表示 #####
-@app.route("/get_user", methods=["POST"])
-def get_user():
-    data = request.get_json()
-    sender_num = data.get("sender_num")
-
+@app.route("/api/users", methods=["GET"])
+def get_users():
     conn = get_db_connection()
-    conn.execute(
-        "INSERT INTO users (name, balance, account) VALUES (?, ?, ?)",
-        (name, balance, account_number)
-    )
-    conn.commit()
+    users = conn.execute("SELECT * FROM users").fetchall()
     conn.close()
-
-    return jsonify({"status": "success", "message": "ユーザーを追加しました！"})
+    return jsonify([dict(user) for user in users])
 
 # 指定したidのユーザの情報をとる
 @app.route("/api/users/<int:user_id>", methods=["GET"])
@@ -100,7 +90,7 @@ def add_send_history():
 
         if not all([server_id, reciever_id, amount]):
             return jsonify({"status": "error", "message": "送金元ID, 送金先ID, 金額は必須です。"}), 400
-        
+
         current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         conn = get_db_connection()
@@ -119,7 +109,7 @@ def add_send_history():
         return jsonify({"status": "error", "message": f"データベースエラー: {e}"}), 500
     except Exception as e:
         return jsonify({"status": "error", "message": f"予期せぬエラーが発生しました: {e}"}), 500
-  
-  
+
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

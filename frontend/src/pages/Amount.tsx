@@ -1,12 +1,28 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+type User = {
+    id: number;
+    name: string;
+    account_number: string;
+    balance: number;
+};
 
 function Amount() {
-    // 将来はここをDBから取得する
-    const TRANSFER_LIMIT = 90000;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const user: User | undefined = (location.state as { user?: User } | null)?.user;
 
     const [amount, setAmount] = useState(""); // 入力値を管理
-    const navigate = useNavigate();
+
+    const [balance, setBalance] = useState<number | null>(null);
+
+    useEffect(() => {
+    fetch("http://localhost:5001/api/users/1")
+        .then(r => r.json())
+        .then((u) => setBalance(u.balance))
+        .catch(console.error);
+    }, []);
 
     // 数値を3桁ごとにカンマ区切りにする関数
     const formatNumber = (num: number) => {
@@ -29,7 +45,7 @@ function Amount() {
                 className="w-32 h-32 rounded-full mb-4"
             />
             <div className="flex flex-col ml-10">
-                <p className="text-xl text-gray-800">田中一郎さんに</p>
+                <p className="text-xl text-gray-800">{user?.name}さんに</p>
                 <p className="text-xl text-gray-800 font-bold">送金する</p>
             </div>
             </div>
@@ -49,7 +65,7 @@ function Amount() {
                 <input
                     type="text"
                     id="transfer-limit"
-                    value={`${formatNumber(TRANSFER_LIMIT)} 円`}
+                    value={balance !== null ? `${balance.toLocaleString("ja-JP")} 円` : "----"}
                     className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-gray-900 text-lg font-bold bg-white"
                     readOnly
                 />
