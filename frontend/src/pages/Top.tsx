@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Top() {
 
     return (
@@ -38,18 +39,15 @@ function Top() {
                 </p>
 */}
                 <div className="flex justify-center gap-4 mb-5 w-full max-w-md">
-                    <button className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
-                        {/* 上半分に画像 */}
+                    <Link to="/recipients" className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
                         <img
                             src="/assets/images/icons/arrow-up.png"
                             alt="送金アイコン"
                             className="w-1/5 h-1/5 object-contain mb-2"
                         />
-
-                        {/* 下半分に文字 */}
                         <span className="text-center text-lg">送金</span>
-                    </button>
-                    <button className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
+                    </Link>
+                    <Link to="/request" className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
                         {/* 上半分に画像 */}
                         <img
                             src="/assets/images/icons/arrow-down.png"
@@ -58,8 +56,8 @@ function Top() {
                         />
 
                         {/* 下半分に文字 */}
-                        <span className="text-center text-lg">送金</span>
-                    </button>
+                        <span className="text-center text-lg">請求</span>
+                    </Link>
                 </div>
                 <button
                     className="relative flex items-center w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5"
