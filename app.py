@@ -15,6 +15,7 @@ def get_db_connection():
     return conn
 
 
+
 ##### 送金処理 #####
 @app.route("/api/sendmoney", methods=["POST"])
 def send_money():
@@ -22,6 +23,9 @@ def send_money():
     amount = data.get("amount")
     sender_num = data.get("sender_num")
     receiver_num = data.get("reciever_num")
+    message = data.get("message", "")
+
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -47,6 +51,11 @@ def send_money():
         cursor.execute("UPDATE users SET balance = balance - ? WHERE account_number = ?", (amount, sender_num))
         cursor.execute("UPDATE users SET balance = balance + ? WHERE account_number = ?", (amount, receiver_num))
 
+        conn.execute(
+            "INSERT INTO send_histories (sender_num, receiver_num, datetime, amount, message) VALUES (?, ?, ?, ?, ?)",
+            (sender_num, receiver_num, current_date, amount, message)
+        )
+
         conn.commit()  # コミット
 
         return jsonify({"status": 0, "message": f"{sender_num}から{receiver_num}へ{amount}円送金完了"})
@@ -65,6 +74,22 @@ def get_users():
     users = conn.execute("SELECT * FROM users").fetchall()
     conn.close()
     return jsonify([dict(user) for user in users])
+
+@app.route("/api/login", methods=["POST"])
+def login():
+    print("aaaa")
+    data = request.get_json()
+    account_number = data.get("account_number")
+
+    print(account_number)
+    conn = get_db_connection()
+    user = conn.execute("SELECT * FROM users WHERE account_number = ?", (account_number,)).fetchone()
+    conn.close()
+
+    if user is None:
+        return jsonify({"error": "口座番号が存在しません"}), 404
+
+    return jsonify(dict(user))
 
 # 指定したidのユーザの情報をとる
 @app.route("/api/users/<int:user_id>", methods=["GET"])
@@ -109,7 +134,6 @@ def add_send_history():
         return jsonify({"status": "error", "message": f"データベースエラー: {e}"}), 500
     except Exception as e:
         return jsonify({"status": "error", "message": f"予期せぬエラーが発生しました: {e}"}), 500
-
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
