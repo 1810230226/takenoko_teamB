@@ -27,8 +27,8 @@ cursor.executemany("INSERT OR IGNORE INTO users (id, account_number, name, balan
 
 conn.commit()
 
-# 挿入確認
-for row in cursor.execute("SELECT account_number, name FROM users"):
+for row in cursor.execute("SELECT * FROM users"):
     print(row)
+
 
 conn.close()
