@@ -1,23 +1,17 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-
-type User = {
-    id: number;
-    name: string;
-    account_number: string;
-    balance: number;
-};
+import { useUser } from "../context/UserContext";
 
 function Top() {
-    const [user, setUser] = useState<User | null>(null);
+    const { user, setUser } = useUser();
     const [showBalance, setShowBalance] = useState(true);
 
-    useEffect(() => {
-        fetch("http://localhost:5001/api/users/1")  // ← id=1 を指定
-        .then((res) => res.json())
-        .then((data) => setUser(data))
-        .catch((err) => console.error("Error fetching user:", err));
-    }, []);
+    //useEffect(() => {
+    //    fetch("http://localhost:5001/api/users/1")  // ← id=1 を指定
+    //    .then((res) => res.json())
+    //    .then((data) => setUser(data))
+    //    .catch((err) => console.error("Error fetching user:", err));
+    //}, []);
 
     return (
         <>
