@@ -1,4 +1,19 @@
+import { useNavigate, useLocation } from "react-router-dom";
+
+interface LocationState {
+  amount: number;
+  recipientName: string;
+}
+
 function Complete() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const recipientName = "田中一郎";
+    const amount = 15000; // 数値で定義
+
+  // 金額を3桁ごとにカンマ区切り
+    const formattedAmount = amount.toLocaleString();
+
     return (
         <div className="mx-auto h-screen bg-orange-50 shadow-lg rounded-3xl overflow-hidden flex flex-col justify-center items-center py-20 px-6">
         <div className="flex flex-col items-center text-center">
@@ -24,20 +39,23 @@ function Complete() {
         <div className="flex items-center text-center p-6 mt-8">
             <img
             src="/assets/images/icons/human1.png"
-            alt="田中一郎"
+            alt={recipientName}
             className="w-32 h-32 rounded-full mr-4"
             />
             <p className="text-lg text-gray-800 text-left">
-            15,000 円 を
+            {formattedAmount} 円 を
             <br />
-            田中一郎さんに
+            {recipientName}さんに
             <br />
             送金しました
             </p>
         </div>
 
         <div className="w-full mt-auto">
-            <button className="w-full flex items-center justify-center bg-white border border-gray-300 rounded-lg p-4 text-gray-800 text-lg font-bold shadow-sm hover:bg-gray-50 transition-colors duration-200">
+            <button
+            onClick={() => navigate("/top")}
+            className="w-full flex items-center justify-center bg-white border border-gray-300 rounded-lg p-4 text-gray-800 text-lg font-bold shadow-sm hover:bg-gray-50 transition-colors duration-200"
+            >
             トップに戻る
             <svg
                 className="w-5 h-5 ml-2"
