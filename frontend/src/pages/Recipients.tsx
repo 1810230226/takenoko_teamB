@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type User = {
     id: number;
@@ -9,15 +9,27 @@ type User = {
 };
 
 function Recipients() {
-    const [users, setUsers] = useState<User[]>([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    const excludeUserId: number | undefined = location.state?.excludeUserId;
+
+    const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-    fetch("http://localhost:5001/api/users")
-        .then((res) => res.json())
-        .then((data: User[]) => setUsers(data))
-        .catch((err) => console.error("Error fetching users:", err));
-    }, []);
+        (async () => {
+            try {
+                const res = await fetch("http://localhost:5001/api/users");
+                const data: User[] = await res.json();
+                const filtered = typeof excludeUserId === "number"
+                ? data.filter(u => u.id !== excludeUserId)
+                : data;
+            setUsers(filtered);
+        } finally {
+            setLoading(false);
+        }
+        })();
+    }, [excludeUserId]);
 
     const handleClick = (user: User) => {
         console.log("選択:", user.name);

@@ -67,23 +67,24 @@ def get_user():
     sender_num = data.get("sender_num")
 
     conn = get_db_connection()
-    cursor = conn.cursor()
+    conn.execute(
+        "INSERT INTO users (name, balance, account) VALUES (?, ?, ?)",
+        (name, balance, account_number)
+    )
+    conn.commit()
+    conn.close()
 
-    users_dict = {}  # 結果を格納する辞書
+    return jsonify({"status": "success", "message": "ユーザーを追加しました！"})
 
-    for row in cursor.execute("SELECT account_number, name FROM users"):
-        account_number = row["account_number"]
-        name = row["name"]
-
-        if account_number == sender_num:
-            continue  # 除外
-
-        # 辞書に追加
-        users_dict[account_number] = name
-
-    cursor.close()
-
-    return jsonify(users_dict)
+# 指定したidのユーザの情報をとる
+@app.route("/api/users/<int:user_id>", methods=["GET"])
+def get_user(user_id):
+    conn = get_db_connection()
+    user = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    conn.close()
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(dict(user))
 
 @app.route("/api/send_history", methods=["POST"])
 def add_send_history():
@@ -118,17 +119,7 @@ def add_send_history():
         return jsonify({"status": "error", "message": f"データベースエラー: {e}"}), 500
     except Exception as e:
         return jsonify({"status": "error", "message": f"予期せぬエラーが発生しました: {e}"}), 500
-
-
   
   
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
-
-
-
-
-
-
-
-

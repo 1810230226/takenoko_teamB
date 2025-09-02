@@ -1,11 +1,24 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+type User = {
+    id: number;
+    name: string;
+    account_number: string;
+    balance: number;
+};
 
 function Top() {
-
-    // DB完成後に変更
-    const balance = 100000
+    const [user, setUser] = useState<User | null>(null);
     const [showBalance, setShowBalance] = useState(true);
+
+    useEffect(() => {
+        fetch("http://localhost:5001/api/users/1")  // ← id=1 を指定
+        .then((res) => res.json())
+        .then((data) => setUser(data))
+        .catch((err) => console.error("Error fetching user:", err));
+    }, []);
+
     return (
         <>
             <div className="flex flex-col items-center justify-center w-full min-h-screen p-4 bg-orange-50">
@@ -19,8 +32,8 @@ function Top() {
 
                     {/* 名前とID */}
                     <div className="ml-4 space-y-4 -mt-6">
-                        <p className="text-sm text-gray-500">口座番号 : 0000000</p>
-                        <p className="text-2xl font-bold font-sans">田中  一郎</p>
+                        <p className="text-sm text-gray-500">口座番号 : {user ? user.account_number : "------"}</p>
+                        <p className="text-2xl font-bold font-sans">{user ? user.name : "読み込み中..."}</p>
                     </div>
                 </div>
 
@@ -28,7 +41,12 @@ function Top() {
                 <p className="flex items-center justify-between w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5">
                 <span className="flex items-baseline space-x-1">
                     <span>
-                        {showBalance ? balance.toLocaleString() : "******"}
+                        {user
+                            ? showBalance
+                                ? user.balance.toLocaleString()
+                                : "******"
+                            : "--"
+                        }
                     </span>
                     <span>円</span>
                 </span>
@@ -53,7 +71,7 @@ function Top() {
                 </p>
 */}
                 <div className="flex justify-center gap-4 mb-5 w-full max-w-md">
-                    <Link to="/recipients" className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
+                    <Link to="/recipients" state={{ excludeUserId: user?.id }} className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
                         <img
                             src="/assets/images/icons/arrow-up.png"
                             alt="送金アイコン"
