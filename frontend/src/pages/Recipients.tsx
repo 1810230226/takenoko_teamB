@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+type User = {
+    id: number;
+    name: string;
+    account_number: string;
+    balance: number;
+};
+
 function Recipients() {
+    const [users, setUsers] = useState<User[]>([]);
     const navigate = useNavigate();
 
-    // 今回は const で定義（将来的には DB から取得）
-    const recipients = [
-        { id: 1, name: "サンプル Aさん", image: "/assets/images/icons/human1.png" },
-        { id: 2, name: "サンプル Bさん", image: "/assets/images/icons/human1.png" },
-        { id: 3, name: "サンプル Dさん", image: "/assets/images/icons/human1.png" },
-    ];
+    useEffect(() => {
+    fetch("http://localhost:5001/api/users")
+        .then((res) => res.json())
+        .then((data: User[]) => setUsers(data))
+        .catch((err) => console.error("Error fetching users:", err));
+    }, []);
 
-    const handleClick = (recipientName: string) => {
-        // 将来的には選んだ recipient の情報を渡す
-        console.log("選択:", recipientName);
-        navigate("/amount");
+    const handleClick = (user: User) => {
+        console.log("選択:", user.name);
+        navigate("/amount", { state: { user } });
     };
 
     return (
@@ -24,18 +31,18 @@ function Recipients() {
         </header>
 
         <ul className="divide-y divide-gray-200 flex flex-col">
-            {recipients.map((recipient) => (
+            {users.map((user) => (
             <li
-                key={recipient.id}
+                key={user.id}
                 className="flex items-center p-4 cursor-pointer hover:bg-orange-100"
-                onClick={() => handleClick(recipient.name)}
+                onClick={() => handleClick(user)}
             >
                 <img
-                src={recipient.image}
-                alt={recipient.name}
-                className="w-20 h-20 rounded-full mr-4"
+                    src="/assets/images/icons/human1.png"
+                    alt={user.name}
+                    className="w-20 h-20 rounded-full mr-4"
                 />
-                <span className="text-gray-800 text-lg">{recipient.name}</span>
+                <span className="text-gray-800 text-lg">{user.name}</span>
             </li>
             ))}
         </ul>
