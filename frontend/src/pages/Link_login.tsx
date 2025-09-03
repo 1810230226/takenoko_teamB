@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useUser } from "../context/UserContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function Link_login() {
-    const [accountNumber, setAccountNumber] = useState("");
+        const [accountNumber, setAccountNumber] = useState("");
     //const [userInfo, setUserInfo] = useState(null);
     const { user, setUser } = useUser();
     const navigate = useNavigate();  // 画面遷移用
@@ -44,11 +44,8 @@ function Link_login() {
             alert("サーバーエラーが発生しました");
         }
     };
-
-
     return (
-        <>
-            <div className="flex flex-col items-center justify-center w-full min-h-screen p-4 bg-orange-50">
+        <div className="flex flex-col items-center justify-center w-full min-h-screen p-4 bg-orange-50">
                 {/* タイトル */}
                 <h1 className="text-3xl font-extrabold text-orange-600 mb-8 drop-shadow-md">
                     たけのこ銀行 🏦
@@ -77,9 +74,7 @@ function Link_login() {
                         ログイン
                     </button>
                 </div>
-            </div>
-
-        </>
+        </div>
     );
 }
 

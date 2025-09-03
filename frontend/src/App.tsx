@@ -7,6 +7,7 @@ import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
 import Create_link from "./pages/Create_link";
+import Link_login from "./pages/Link_login";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/complete" element={<Complete />} />
                 <Route path="/request" element={<Request />} />
                 <Route path="/create-link" element={<Create_link />} />
+                <Route path="/link-login" element={<Link_login />} />
             </Routes>
         </BrowserRouter>
     );

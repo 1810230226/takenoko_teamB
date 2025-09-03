@@ -65,23 +65,23 @@ function Request() {
         <div className="w-6" aria-hidden />
         </header>
         <div className="p-6 flex-grow flex flex-col justify-between">
-            <form className="space-y-6">
-        <div>
-        <label
-            htmlFor="request-amount"
-            className="block text-gray-500 font-medium mb-2"
-        >
-            請求金額
-        </label>
-        <input
-            type="text"
-            id="request-amount"
-            placeholder="金額を入力"
-            value={amount}
-            onChange={(e) => setAmount(formatNumber(e.target.value))}
-            className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg text-gray-900 font-bold bg-gray-100"
-        />
-        </div>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+                <div>
+                    <label
+                        htmlFor="request-amount"
+                        className="block text-gray-500 font-medium mb-2"
+                    >
+                        請求金額
+                    </label>
+                    <input
+                        type="text"
+                        id="request-amount"
+                        placeholder="金額を入力"
+                        value={amount}
+                        onChange={(e) => setAmount(formatNumber(e.target.value))}
+                        className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg text-gray-900 font-bold bg-gray-100"
+                    />
+                </div>
 
 
                     <div>
@@ -100,6 +100,7 @@ function Request() {
 
                     <div className="mt-auto">
                         <button
+                            
                             type="submit"
                             disabled={!amount || loading}
                             className={`w-full font-bold p-4 rounded-md shadow-lg transition-colors duration-200 ${
