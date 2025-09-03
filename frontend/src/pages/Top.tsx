@@ -73,16 +73,17 @@ function Top() {
                         />
                         <span className="text-center text-lg">送金</span>
                     </Link>
-                    <Link to="/request" className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
-                        {/* 上半分に画像 */}
-                        <img
-                            src="/assets/images/icons/arrow-down.png"
-                            alt="送金アイコン"
-                            className="w-1/5 h-1/5 object-contain mb-2"
-                        />
-
-                        {/* 下半分に文字 */}
-                        <span className="text-center text-lg">請求</span>
+                    <Link
+                    to="/request/recipients"
+                    state={{ excludeUserId: user?.id }}
+                    className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray"
+                    >
+                    <img
+                        src="/assets/images/icons/arrow-down.png"
+                        alt="送金アイコン"
+                        className="w-1/5 h-1/5 object-contain mb-2"
+                    />
+                    <span className="text-center text-lg">請求</span>
                     </Link>
                 </div>
                 <Link

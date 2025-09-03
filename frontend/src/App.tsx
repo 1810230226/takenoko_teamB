@@ -9,12 +9,21 @@ import Request from "./pages/Request";
 import Login from "./pages/Login";
 import ChatScreen from "./pages/Messages";
 import TransactionHistory from "./pages/TransactionHistory";
+import LinkLogin from "./pages/LinkLogin";
+import LinkSend from "./pages/LinkSend";
+import Create_link from "./pages/Create_link";
+
+import RequestRecipients from "./pages/RequestRecipients";
+import RequestAmount from "./pages/RequestAmount";
+import AmountLink from "./pages/AmountLink";
 
 function App() {
     return (
         <UserProvider>
             <BrowserRouter>
                 <Routes>
+                    <Route path="/request/recipients" element={<RequestRecipients />} />
+                    <Route path="/request/amount" element={<RequestAmount />} />
                     <Route path="/top" element={<Top />} />
                     <Route path="/top2" element={<Top2 />} />
                     <Route path="/recipients" element={<Recipients />} />
@@ -24,9 +33,14 @@ function App() {
                     <Route path="/histories" element={<TransactionHistory />} />
                     <Route path="/messages" element={<ChatScreen />} />
                     <Route path="/" element={<Login />} />
+                    <Route path="/link-login" element={<LinkLogin />} />
+                    <Route path="/link-send" element={<LinkSend />} />
+                    <Route path="/create-link" element={<Create_link />} />
+
                 </Routes>
             </BrowserRouter>
         </UserProvider>
+
     );
 }
 

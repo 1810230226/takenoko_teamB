@@ -1,3 +1,4 @@
+import BackButton from "../components/BackButton";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -38,11 +39,21 @@ function Recipients() {
 
     return (
         <div className="mx-auto h-screen bg-orange-50">
-        <header className="bg-rose-400 text-white p-4 text-center text-lg font-bold">
-            送金相手を選択
-        </header>
+            <header className="bg-rose-400 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
+            {/* 左：戻るボタン（幅を固定） */}
+            <div className="w-6">
+                <BackButton />
+            </div>
 
-        <ul className="divide-y divide-gray-200 flex flex-col">
+            {/* 中央：タイトル（常に中央寄せ） */}
+            <h1 className="text-center">送金相手を選択</h1>
+
+            {/* 右：ダミー（左と同じ幅）→ タイトルを“完全中央”に保つため */}
+            <div className="w-6" aria-hidden />
+            </header>
+
+        <ul className="divide-y divide-gray-200 flex flex-col flex-grow">
+
             {users.map((user) => (
             <li
                 key={user.id}
@@ -58,6 +69,14 @@ function Recipients() {
             </li>
             ))}
         </ul>
+                <div className="p-4">
+                <button
+                    onClick={() => navigate("/amount/link")}
+                    className="w-full bg-rose-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-rose-700 transition-colors"
+                >
+                    外部リンクを作成する
+                </button>
+                </div>
         </div>
     );
 }
