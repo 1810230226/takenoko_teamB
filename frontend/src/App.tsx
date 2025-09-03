@@ -1,14 +1,15 @@
 import { UserProvider } from "./context/UserContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
 import Top from "./pages/Top";
 import Top2 from "./pages/Top2";
 import Recipients from "./pages/Recipients";
 import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
-import Login from "./pages/Login";
 import LinkLogin from "./pages/LinkLogin";
 import LinkSend from "./pages/LinkSend";
+import Create_link from "./pages/Create_link";
 
 
 function App() {
@@ -25,10 +26,12 @@ function App() {
                     <Route path="/" element={<Login />} />
                     <Route path="/link-login" element={<LinkLogin />} />
                     <Route path="/link-send" element={<LinkSend />} />
+                    <Route path="/create-link" element={<Create_link />} />
 
                 </Routes>
             </BrowserRouter>
         </UserProvider>
+
     );
 }
 
