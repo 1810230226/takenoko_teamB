@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Request() {
     const [amount, setAmount] = useState("");
     const [message, setMessage] = useState("");
-    const [link, setLink] = useState("");
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const formatNumber = (num: string) => {
         const value = num.replace(/,/g, "");
@@ -21,13 +22,10 @@ function Request() {
         }
 
         const numericAmount = Number(amount.replace(/,/g, ""));
-        console.log("=== デバッグ情報 ===");
-        console.log("送信前のデータ:", { sender_id: 1, amount: numericAmount, message });
-
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:5000/api/request-links", {
+            const response = await fetch("http://localhost:5001/api/request-links", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -37,14 +35,13 @@ function Request() {
                 }),
             });
 
-            console.log("HTTPステータス:", response.status);
-
             if (!response.ok) throw new Error("リンク作成に失敗しました");
 
             const data = await response.json();
-            console.log("バックエンドからのレスポンス:", data);
 
-            setLink(data.link);
+            // ここで遷移
+            // data.id など、バックエンドが返すリンクIDに置き換えてください
+            navigate(`/create-link?id=403f5480-96a7-417b-aba1-d285e380448f`);
         } catch (err) {
             alert("リンク作成中にエラーが発生しました");
         } finally {
@@ -102,15 +99,6 @@ function Request() {
                         </button>
                     </div>
                 </form>
-
-                {link && (
-                    <div className="mt-6 p-4 bg-gray-100 rounded-md text-center">
-                        作成されたリンク:{" "}
-                        <a href={link} className="text-blue-500 underline">
-                            {link}
-                        </a>
-                    </div>
-                )}
             </div>
         </div>
     );
