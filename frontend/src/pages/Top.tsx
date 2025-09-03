@@ -26,7 +26,7 @@ function Top() {
 
                     {/* 名前とID */}
                     <div className="ml-4 space-y-4 -mt-6">
-                        <p className="text-sm text-gray-500">口座番号 : {user ? user.account_number : "------"}</p>
+                        <p className="text-sm text-gray-500">口座番号 : {user ? user.account_number.toString().padStart(7, "0") : "------"}</p>
                         <p className="text-2xl font-bold font-sans">{user ? user.name : "読み込み中..."}</p>
                     </div>
                 </div>
