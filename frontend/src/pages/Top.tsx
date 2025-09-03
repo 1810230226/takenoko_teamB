@@ -6,12 +6,12 @@ function Top() {
     const { user, setUser } = useUser();
     const [showBalance, setShowBalance] = useState(true);
 
-    //useEffect(() => {
-    //    fetch("http://localhost:5001/api/users/1")  // ← id=1 を指定
-    //    .then((res) => res.json())
-    //    .then((data) => setUser(data))
-    //    .catch((err) => console.error("Error fetching user:", err));
-    //}, []);
+    useEffect(() => {
+        fetch(`http://localhost:5001/api/users/${user?.id}`)  // ← id を指定
+        .then((res) => res.json())
+        .then((data) => setUser(data))
+        .catch((err) => console.error("Error fetching user:", err));
+    }, [user]);
 
     return (
         <>
