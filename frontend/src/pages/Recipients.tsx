@@ -7,6 +7,7 @@ type User = {
     name: string;
     account_number: string;
     balance: number;
+    icon_pass: string;
 };
 
 function Recipients() {
@@ -52,7 +53,8 @@ function Recipients() {
             <div className="w-6" aria-hidden />
             </header>
 
-        <ul className="divide-y divide-gray-200 flex flex-col">
+        <ul className="divide-y divide-gray-200 flex flex-col flex-grow">
+
             {users.map((user) => (
             <li
                 key={user.id}
@@ -60,7 +62,7 @@ function Recipients() {
                 onClick={() => handleClick(user)}
             >
                 <img
-                    src="/assets/images/icons/human1.png"
+                    src={user.icon_pass}
                     alt={user.name}
                     className="w-20 h-20 rounded-full mr-4"
                 />
@@ -68,6 +70,14 @@ function Recipients() {
             </li>
             ))}
         </ul>
+                <div className="p-4">
+                <button
+                    onClick={() => navigate("/amount/link")}
+                    className="w-full bg-rose-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-rose-700 transition-colors"
+                >
+                    外部リンクを作成する
+                </button>
+                </div>
         </div>
     );
 }

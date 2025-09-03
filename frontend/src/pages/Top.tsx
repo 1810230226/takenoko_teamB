@@ -6,12 +6,12 @@ function Top() {
     const { user, setUser } = useUser();
     const [showBalance, setShowBalance] = useState(true);
 
-    //useEffect(() => {
-    //    fetch("http://localhost:5001/api/users/1")  // ← id=1 を指定
-    //    .then((res) => res.json())
-    //    .then((data) => setUser(data))
-    //    .catch((err) => console.error("Error fetching user:", err));
-    //}, []);
+    useEffect(() => {
+        fetch(`http://localhost:5001/api/users/${user?.id}`)  // ← id を指定
+        .then((res) => res.json())
+        .then((data) => setUser(data))
+        .catch((err) => console.error("Error fetching user:", err));
+    }, [user]);
 
     return (
         <>
@@ -26,7 +26,7 @@ function Top() {
 
                     {/* 名前とID */}
                     <div className="ml-4 space-y-4 -mt-6">
-                        <p className="text-sm text-gray-500">口座番号 : {user ? user.account_number : "------"}</p>
+                        <p className="text-sm text-gray-500">口座番号 : {user ? user.account_number.toString().padStart(7, "0") : "------"}</p>
                         <p className="text-2xl font-bold font-sans">{user ? user.name : "読み込み中..."}</p>
                     </div>
                 </div>
@@ -73,19 +73,21 @@ function Top() {
                         />
                         <span className="text-center text-lg">送金</span>
                     </Link>
-                    <Link to="/request" className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray">
-                        {/* 上半分に画像 */}
-                        <img
-                            src="/assets/images/icons/arrow-down.png"
-                            alt="送金アイコン"
-                            className="w-1/5 h-1/5 object-contain mb-2"
-                        />
-
-                        {/* 下半分に文字 */}
-                        <span className="text-center text-lg">請求</span>
+                    <Link
+                    to="/request/recipients"
+                    state={{ excludeUserId: user?.id }}
+                    className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray"
+                    >
+                    <img
+                        src="/assets/images/icons/arrow-down.png"
+                        alt="送金アイコン"
+                        className="w-1/5 h-1/5 object-contain mb-2"
+                    />
+                    <span className="text-center text-lg">請求</span>
                     </Link>
                 </div>
-                <button
+                <Link
+                    to="/histories" // 👈 遷移先のパスをここに指定
                     className="relative flex items-center w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5"
                 >
                     {/* 中央にテキスト */}
@@ -99,8 +101,10 @@ function Top() {
                         alt="アイコン"
                         className="ml-auto w-3 h-3"
                     />
-                </button>
-                <button
+                </Link>
+                <Link
+                    to="/messages/recipients"
+                    state={{ excludeUserId: user?.id }}
                     className="relative flex items-center w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5"
                 >
                     {/* 中央にテキスト */}
@@ -114,7 +118,7 @@ function Top() {
                         alt="アイコン"
                         className="ml-auto w-3 h-3"
                     />
-                </button>
+                </Link>
             </div>
 
         </>
