@@ -1,10 +1,19 @@
+import BackButton from "../components/BackButton";
 function Request() {
     return (
         <div className="mx-auto h-screen bg-white shadow-lg flex flex-col">
-        <header className="bg-cyan-600 text-white text-center p-4 font-bold text-lg">
-            請求リンクの作成
-        </header>
+        <header className="bg-cyan-600 text-white p-4 font-bold text-lg grid grid-cols-[auto_1fr_auto] items-center">
+        {/* 左：戻るボタン */}
+        <div className="w-6">
+            <BackButton />
+        </div>
 
+        {/* 中央：タイトル */}
+        <h1 className="text-center">請求リンクの作成</h1>
+
+        {/* 右：ダミー（中央を保つため） */}
+        <div className="w-6" aria-hidden />
+        </header>
         <div className="p-6 flex-grow flex flex-col justify-between">
             <form className="space-y-6">
             <div>
