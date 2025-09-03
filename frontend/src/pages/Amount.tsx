@@ -9,9 +9,9 @@ function Amount() {
     const { user, setUser } = useUser();
 
     const TRANSFER_LIMIT = user?.balance;
-    console.log(TRANSFER_LIMIT)
 
     const [amount, setAmount] = useState(""); // 入力値を管理
+    const [error, setError] = useState(false); // 入力上限を管理
     const navigate = useNavigate();
 
     // 数値を3桁ごとにカンマ区切りにする関数
@@ -24,7 +24,7 @@ function Amount() {
         if (!amount) return; // 空なら何もしない
         console.log(Number(amount.replace(/,/g, "")), TRANSFER_LIMIT)
         if (Number(amount.replace(/,/g, "")) > Number(TRANSFER_LIMIT)) {
-            alert("上限金額を超えています。")
+            setError(true)
             return
         }
 
@@ -105,30 +105,38 @@ function Amount() {
                     </div>
 
                     <div>
-                        {amount && (
-                            <label
-                                htmlFor="amount"
-                                className="block text-sm font-medium text-gray-500 mb-1"
-                            >
-                                送金額
-                            </label>
-                        )}
 
-                        <input
-                            type="text"
-                            id="amount"
-                            placeholder="送る金額"
-                            value={amount}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                const value = e.target.value.replace(/,/g, ""); // カンマ除去
-                                if (/^\d*$/.test(value)) {
-                                    // 半角数字のみ
-                                    // 入力値をカンマ付きに変換
-                                    setAmount(value ? formatNumber(Number(value)) : "");
-                                }
-                            }}
-                            className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg bg-white"
-                        />
+
+                        <label
+                            htmlFor="amount"
+                            className="block text-sm font-medium text-gray-500 mb-1"
+                        >
+                            送る金額
+                        </label>
+
+
+                        <div className="w-full max-w-sm">
+                            <input
+                                type="text"
+                                id="amount"
+                                placeholder="送る金額"
+                                value={amount}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    const value = e.target.value.replace(/,/g, "");
+                                    if (/^\d*$/.test(value)) {
+                                        setAmount(value ? formatNumber(Number(value)) : "");
+                                        setError(false); // 入力中はエラー解除
+                                    }
+                                }}
+                                className={`block w-full rounded-md shadow-sm p-4 text-lg bg-white ${error ? "border-red-600 bg-red-100" : "border border-gray-300"
+                                    }`}
+                            />
+                            {/* 常に高さを確保するため空文字も入れる */}
+                            <p className="text-red-600 text-sm h-5">
+                                {error ? "上限を超えています" : ""}
+                            </p>
+                        </div>
+
                     </div>
 
                     {/* メッセージ */}
