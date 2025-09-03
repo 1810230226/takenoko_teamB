@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import toast from 'react-hot-toast'
 
 function Link_login() {
     const [accountNumber, setAccountNumber] = useState("");
@@ -28,7 +29,7 @@ function Link_login() {
 
             if (!res.ok) {
                 const error = await res.json();
-                alert(error.error || "エラーが発生しました");
+                toast.error(error.error || "エラーが発生しました");
                 return;
             }
 
@@ -40,7 +41,7 @@ function Link_login() {
                 balance: data.balance,
             });
 
-            alert(`ようこそ ${data.name} さん！ 残高: ${data.balance}円`);
+            toast.success(`ようこそ ${data.name} さん！`);
 
             // linkId があれば /remit に遷移
             if (linkId) {
@@ -50,7 +51,7 @@ function Link_login() {
             }
         } catch (err) {
             console.error(err);
-            alert("サーバーエラーが発生しました");
+            toast.error("サーバーエラーが発生しました");
         }
     };
 
