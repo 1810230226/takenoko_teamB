@@ -1,12 +1,14 @@
 import { UserProvider } from "./context/UserContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
 import Top from "./pages/Top";
 import Top2 from "./pages/Top2";
 import Recipients from "./pages/Recipients";
 import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
-import Login from "./pages/Login";
+import Create_link from "./pages/Create_link";
+
 import RequestRecipients from "./pages/RequestRecipients";
 import RequestAmount from "./pages/RequestAmount";
 import AmountLink from "./pages/AmountLink";
@@ -26,6 +28,7 @@ function App() {
                     <Route path="/request" element={<Request />} />
                     <Route path="/" element={<Login />} />
                     <Route path="/amount/link" element={<AmountLink />} />
+                    <Route path="/create-link" element={<Create_link />} />
                 </Routes>
             </BrowserRouter>
         </UserProvider>
