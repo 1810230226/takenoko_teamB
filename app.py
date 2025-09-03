@@ -126,9 +126,41 @@ def create_request_link():
     conn.commit()
     conn.close()
 
-    return jsonify({"id": link_id, "link": f"/send?id={link_id}"})
+    return jsonify({"id": link_id, "link": f"/link_login?id={link_id}"})
 
+
+# @app.route("/api/request_links/<link_id>", methods=["GET"])
+# def get_request_link(link_id):
+#     cur = get_db().cursor()
+#     cur.execute("SELECT * FROM request_links WHERE id = ?", (link_id,))
+#     row = cur.fetchone()
+#     if row:
+#         return jsonify({
+#             "id": row["id"],
+#             "sender_id": row["sender_id"],
+#             "amount": row["amount"],
+#             "message": row["message"],
+#             "status": row["status"],
+#             "created_at": row["created_at"]
+#         })
+#     else:
+#         return jsonify({"error": "Link not found"}), 404
+
+@app.route("/api/request-links/<link_id>", methods=["GET"])
+def get_request_link(link_id):
+    conn = get_db_connection()
+    try:
+        row = conn.execute(
+            "SELECT amount FROM request_links WHERE id = ?",
+            (link_id,)
+        ).fetchone()  # ← これでOK（Rowを返す）
+
+        if not row:
+            return jsonify({"error": "Link not found"}), 404
+
+        return jsonify({"amount": row["amount"]}), 200
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
     app.run(port=5001, debug=True)
-
