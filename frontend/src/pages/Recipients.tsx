@@ -52,7 +52,8 @@ function Recipients() {
             <div className="w-6" aria-hidden />
             </header>
 
-        <ul className="divide-y divide-gray-200 flex flex-col">
+        <ul className="divide-y divide-gray-200 flex flex-col flex-grow">
+
             {users.map((user) => (
             <li
                 key={user.id}
@@ -68,6 +69,14 @@ function Recipients() {
             </li>
             ))}
         </ul>
+                <div className="p-4">
+                <button
+                    onClick={() => navigate("/amount/link")}
+                    className="w-full bg-rose-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-rose-700 transition-colors"
+                >
+                    外部リンクを作成する
+                </button>
+                </div>
         </div>
     );
 }
