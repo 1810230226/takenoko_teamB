@@ -4,13 +4,10 @@ import { useUser } from "../context/UserContext";
 
 
 function Amount() {
-
     const location = useLocation();
     const { recipient } = location.state || {};
-
     const { user, setUser } = useUser();
 
-    // 将来はここをDBから取得する
     const TRANSFER_LIMIT = user?.balance;
 
     const [amount, setAmount] = useState(""); // 入力値を管理
@@ -100,15 +97,15 @@ function Amount() {
                             <input
                                 type="text"
                                 id="transfer-limit"
-                                value={`${TRANSFER_LIMIT} 円`}
+                                value={`${TRANSFER_LIMIT?.toLocaleString()} 円`}
                                 className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-gray-900 text-lg font-bold bg-white"
                                 readOnly
                             />
                         </div>
                     </div>
 
-                    {/* 送る金額 */}
                     <div>
+
 
                         <label
                             htmlFor="amount"
@@ -139,6 +136,7 @@ function Amount() {
                                 {error ? "上限を超えています" : ""}
                             </p>
                         </div>
+
                     </div>
 
                     {/* メッセージ */}
