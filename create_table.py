@@ -6,53 +6,17 @@ import uuid
 
 DB_FILE = os.path.join(os.path.dirname(__file__), "takenoko.db")
 
-
-
-# 6人分の初期データ
-users = [
-    (1, "0123456", "佐藤 太郎", 150000, "/assets/images/icons/human1.png"),
-    (2, "1234567", "鈴木 花子", 120000, "/assets/images/icons/human2.png"),
-    (3, "2345678", "高橋 次郎", 200000, "/assets/images/icons/human3.png"),
-    (4, "3456789", "田中 三郎", 80000, "/assets/images/icons/human4.png"),
-    (5, "4567890", "伊藤 美咲", 50000, "/assets/images/icons/human5.png"),
-    (6, "5678901", "渡辺 健一", 175000, "/assets/images/icons/human6.png"),
-]
-
-
 def main():
     os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
     conn = sqlite3.connect(DB_FILE)
     conn.execute("PRAGMA foreign_keys = ON")
     cur = conn.cursor()
 
-
-    ##### ユーザーテーブル #####
-    # ユーザーのアイコンパスを追加
-    cur.execute("DROP TABLE IF EXISTS users")  # 既存テーブル削除(実行時するたびにusersテーブルを初期化)
-    cur.execute("""
-    CREATE TABLE users (
-        id INTEGER PRIMARY KEY,
-        account_number INTEGER,
-        name TEXT,
-        balance INTEGER,
-        icon_pass TEXT
-    )
-    """)
-
-
-
-    # INSERT OR IGNORE → idが重複する場合は無視される
-    cur.executemany("INSERT INTO users (id, account_number, name, balance, icon_pass) VALUES (?, ?, ?, ?, ?)", users)
-
-
-
-
     # ===== DROP (子 → 親) =====
     cur.execute("DROP TABLE IF EXISTS request_links")
-    #cur.execute("DROP TABLE IF EXISTS users")
+    cur.execute("DROP TABLE IF EXISTS users")
 
 
-    '''
     # ===== CREATE (親 → 子) =====
     cur.execute("""
     CREATE TABLE users (
@@ -62,7 +26,7 @@ def main():
         balance INTEGER NOT NULL DEFAULT 0
     )
     """)
-    '''
+
     cur.execute("""
     CREATE TABLE request_links (
         id TEXT PRIMARY KEY,
@@ -77,18 +41,18 @@ def main():
 
 
     # ===== SEED =====
-    #users = [
-    #    (1, "0123456", "佐藤 太郎", 150000),
-    #    (2, "1234567", "鈴木 花子", 120000),
-    #    (3, "2345678", "高橋 次郎", 200000),
-    #    (4, "3456789", "田中 三郎", 80000),
-    #    (5, "4567890", "伊藤 美咲", 50000),
-    #    (6, "5678901", "渡辺 健一", 175000),
-    #]
-    #cur.executemany(
-    #    "INSERT INTO users (id, account_number, name, balance) VALUES (?, ?, ?, ?)",
-    #    users
-    #)
+    users = [
+        (1, "0123456", "佐藤 太郎", 150000),
+        (2, "1234567", "鈴木 花子", 120000),
+        (3, "2345678", "高橋 次郎", 200000),
+        (4, "3456789", "田中 三郎", 80000),
+        (5, "4567890", "伊藤 美咲", 50000),
+        (6, "5678901", "渡辺 健一", 175000),
+    ]
+    cur.executemany(
+        "INSERT INTO users (id, account_number, name, balance) VALUES (?, ?, ?, ?)",
+        users
+    )
 
     link_id = str(uuid.uuid4())
     current_time = datetime.now().isoformat()
@@ -141,16 +105,17 @@ def main():
     #""")
 
 
-    conn.commit()
 
     for row in cur.execute("SELECT * FROM users"):
         print(row)
 
-    print()
-
     for row in cur.execute("SELECT * FROM send_histories"):
         print(row)
-    print()
+
+
+    cur.close()
+    conn.close()
+
 
 
 
