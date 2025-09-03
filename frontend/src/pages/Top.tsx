@@ -1,16 +1,22 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
+import toast from 'react-hot-toast'
 
 function Top() {
     const { user, setUser } = useUser();
     const [showBalance, setShowBalance] = useState(true);
 
+
     useEffect(() => {
         fetch(`http://localhost:5001/api/users/${user?.id}`)  // ← id を指定
-        .then((res) => res.json())
-        .then((data) => setUser(data))
-        .catch((err) => console.error("Error fetching user:", err));
+            .then((res) => res.json())
+            .then((data) => {
+                setUser(data)
+                
+            })
+            .catch((err) => console.error("Error fetching user:", err));
+
     }, [user]);
 
     return (
@@ -33,22 +39,22 @@ function Top() {
 
                 <p className="mb-1 text-left w-full max-w-md ml-2">預金残高</p>
                 <p className="flex items-center justify-between w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5">
-                <span className="flex items-baseline space-x-1">
-                    <span>
-                        {user
-                            ? showBalance
-                                ? user.balance.toLocaleString()
-                                : "******"
-                            : "--"
-                        }
+                    <span className="flex items-baseline space-x-1">
+                        <span>
+                            {user
+                                ? showBalance
+                                    ? user.balance.toLocaleString()
+                                    : "******"
+                                : "--"
+                            }
+                        </span>
+                        <span>円</span>
                     </span>
-                    <span>円</span>
-                </span>
                     <img
                         src={
                             showBalance
-                            ? "/assets/images/icons/eye-close.png"
-                            : "/assets/images/icons/eye-open.png"}
+                                ? "/assets/images/icons/eye-close.png"
+                                : "/assets/images/icons/eye-open.png"}
                         alt="アイコン"
                         className="w-6 h-6 cursor-pointer"
                         onClick={() => setShowBalance(!showBalance)}
@@ -74,16 +80,16 @@ function Top() {
                         <span className="text-center text-lg">送金</span>
                     </Link>
                     <Link
-                    to="/request/recipients"
-                    state={{ excludeUserId: user?.id }}
-                    className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray"
+                        to="/request/recipients"
+                        state={{ excludeUserId: user?.id }}
+                        className="flex flex-col items-center justify-center w-1/2 aspect-square bg-white text-black font-bold rounded-xl border-2 border-gray"
                     >
-                    <img
-                        src="/assets/images/icons/arrow-down.png"
-                        alt="送金アイコン"
-                        className="w-1/5 h-1/5 object-contain mb-2"
-                    />
-                    <span className="text-center text-lg">請求</span>
+                        <img
+                            src="/assets/images/icons/arrow-down.png"
+                            alt="送金アイコン"
+                            className="w-1/5 h-1/5 object-contain mb-2"
+                        />
+                        <span className="text-center text-lg">請求</span>
                     </Link>
                 </div>
                 <Link

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
-
+import toast from 'react-hot-toast'
 
 function Login() {
     const [accountNumber, setAccountNumber] = useState("");
@@ -22,7 +22,7 @@ function Login() {
             console.log("ok des")
             if (!res.ok) {
                 const error = await res.json();
-                alert(error.error || "エラーが発生しました");
+                toast.error(error.error || "エラーが発生しました");
                 return;
             }
 
@@ -34,14 +34,12 @@ function Login() {
                 name: data.name,
                 balance: data.balance,
             });
-            alert(`ようこそ ${data.name} さん！ 残高: ${data.balance}円`);
-            console.log(data)
-            console.log(user)
+            toast.success(`ようこそ ${user?.name} さん!`);
             // ここで画面遷移
             navigate("/top");
         } catch (err) {
             console.error(err);
-            alert("サーバーエラーが発生しました");
+            toast.error("サーバーエラーが発生しました");
         }
     };
 
@@ -78,6 +76,7 @@ function Login() {
                     </button>
                 </div>
             </div>
+            
 
         </>
     );
