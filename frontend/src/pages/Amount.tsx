@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import BackButton from "../components/BackButton";
 
 
 function Amount() {
@@ -69,6 +70,18 @@ function Amount() {
 
     return (
         <div className="mx-auto h-screen bg-orange-50 shadow-lg rounded-3xl overflow-hidden flex flex-col">
+            {/* 追加：Recipientsと同じスタイルのヘッダー（タイトル無し） */}
+            <header className="bg-rose-400 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
+            {/* 左：戻るボタン（幅固定） */}
+            <div className="w-6">
+                <BackButton />
+            </div>
+            {/* 中央：空（タイトル無し） */}
+            <h1 className="text-center">送金する</h1>
+            <div />
+            {/* 右：ダミー（左右バランス用） */}
+            <div className="w-6" aria-hidden />
+            </header>
             <div className="p-6 text-center">
                 <div className="flex items-center">
                     <img
