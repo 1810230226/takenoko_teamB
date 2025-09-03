@@ -16,6 +16,7 @@ import Create_link from "./pages/Create_link";
 import RequestRecipients from "./pages/RequestRecipients";
 import RequestAmount from "./pages/RequestAmount";
 import AmountLink from "./pages/AmountLink";
+import MessageRecipients from "./pages/MessageRecipients";
 
 function App() {
     return (
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/link-login" element={<LinkLogin />} />
                     <Route path="/link-send" element={<LinkSend />} />
                     <Route path="/create-link" element={<Create_link />} />
+                    <Route path="/messages/recipients" element={<MessageRecipients />} />
 
                 </Routes>
             </BrowserRouter>

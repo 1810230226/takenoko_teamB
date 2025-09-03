@@ -7,6 +7,7 @@ type User = {
     name: string;
     account_number: string;
     balance: number;
+    icon_pass: string;
 };
 
 function Recipients() {
@@ -61,7 +62,7 @@ function Recipients() {
                 onClick={() => handleClick(user)}
             >
                 <img
-                    src="/assets/images/icons/human1.png"
+                    src={user.icon_pass}
                     alt={user.name}
                     className="w-20 h-20 rounded-full mr-4"
                 />

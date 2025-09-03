@@ -1,17 +1,16 @@
-// frontend/src/pages/RequestRecipients.tsx
-import BackButton from "../components/BackButton";
+// frontend/src/pages/MessageRecipients.tsx
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import BackButton from "../components/BackButton";
 
 type User = {
   id: number;
   name: string;
   account_number: string;
   balance: number;
-  icon_pass: string;
 };
 
-function RequestRecipients() {
+function MessageRecipients() {
   const navigate = useNavigate();
   const location = useLocation();
   const excludeUserId: number | undefined = location.state?.excludeUserId;
@@ -36,34 +35,29 @@ function RequestRecipients() {
   }, [excludeUserId]);
 
   const handleClick = (user: User) => {
-    // 選んだ相手情報を持って RequestAmount 画面へ
-    navigate("/request/amount", { state: { recipient: user } });
+    // 選んだ相手を ChatScreen に渡す
+    navigate("/messages", { state: { recipient: user } });
   };
 
   return (
     <div className="mx-auto h-screen bg-orange-50">
-      <header className="bg-cyan-600 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
-        {/* 左：戻るボタン */}
+      <header className="bg-green-500 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
         <div className="w-6">
           <BackButton />
         </div>
-        {/* 中央：タイトル */}
-        <h1 className="text-center">請求相手を選択</h1>
-        {/* 右：ダミー */}
+        <h1 className="text-center">メッセージ</h1>
         <div className="w-6" aria-hidden />
       </header>
 
       <ul className="divide-y divide-gray-200 flex flex-col">
         {users.map((user) => (
           <li
-
-
             key={user.id}
             className="flex items-center p-4 cursor-pointer hover:bg-orange-100"
             onClick={() => handleClick(user)}
           >
             <img
-              src={user.icon_pass}
+              src="/assets/images/icons/human1.png"
               alt={user.name}
               className="w-20 h-20 rounded-full mr-4"
             />
@@ -71,16 +65,8 @@ function RequestRecipients() {
           </li>
         ))}
       </ul>
-      <div className="p-4">
-        <button
-          onClick={() => navigate("/request")}
-          className="w-full bg-cyan-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-cyan-700 transition-colors"
-        >
-          外部リンクを作成する
-        </button>
-      </div>
     </div>
   );
 }
 
-export default RequestRecipients;
+export default MessageRecipients;
