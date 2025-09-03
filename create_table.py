@@ -1,123 +1,75 @@
-# drop_create_seed.py
-import os
 import sqlite3
-from datetime import datetime
-import uuid
 
-DB_FILE = os.path.join(os.path.dirname(__file__), "takenoko.db")
+conn = sqlite3.connect("takenoko.db")
+cursor = conn.cursor()
 
-def main():
-    os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
-    conn = sqlite3.connect(DB_FILE)
-    conn.execute("PRAGMA foreign_keys = ON")
-    cur = conn.cursor()
+##### 送金履歴テーブル #####
 
-    # ===== DROP (子 → 親) =====
-    cur.execute("DROP TABLE IF EXISTS request_links")
-    cur.execute("DROP TABLE IF EXISTS users")
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS send_histories (
+    id INTEGER PRIMARY KEY,
+    sender_num TEXT,
+    receiver_num TEXT,
+    datetime TEXT,
+    amount INTEGER,
+    message TEXT
+)
+""")
 
+##### ユーザーテーブル #####
+# ユーザーのアイコンパスを追加
+cursor.execute("DROP TABLE IF EXISTS users")  # 既存テーブル削除(実行時するたびにusersテーブルを初期化)
+cursor.execute("""
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    account_number INTEGER,
+    name TEXT,
+    balance INTEGER,
+    icon_pass TEXT
+)
+""")
 
-    # ===== CREATE (親 → 子) =====
-    cur.execute("""
-    CREATE TABLE users (
-        id INTEGER PRIMARY KEY,
-        account_number TEXT NOT NULL,
-        name TEXT NOT NULL,
-        balance INTEGER NOT NULL DEFAULT 0
-    )
-    """)
+# 6人分の初期データ
+users = [
+    (1, "0123456", "佐藤 太郎", 150000, "/assets/images/icons/human1.png"),
+    (2, "1234567", "鈴木 花子", 120000, "/assets/images/icons/human2.png"),
+    (3, "2345678", "高橋 次郎", 200000, "/assets/images/icons/human3.png"),
+    (4, "3456789", "田中 三郎", 80000, "/assets/images/icons/human4.png"),
+    (5, "4567890", "伊藤 美咲", 50000, "/assets/images/icons/human5.png"),
+    (6, "5678901", "渡辺 健一", 175000, "/assets/images/icons/human6.png"),
+]
 
-    cur.execute("""
-    CREATE TABLE request_links (
-        id TEXT PRIMARY KEY,
-        sender_id INTEGER NOT NULL,
-        amount INTEGER NOT NULL,
-        message TEXT,
-        status TEXT NOT NULL DEFAULT 'created',
-        created_at TEXT NOT NULL,
-        FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
-    )
-    """)
+# INSERT OR IGNORE → idが重複する場合は無視される
+cursor.executemany("INSERT INTO users (id, account_number, name, balance, icon_pass) VALUES (?, ?, ?, ?, ?)", users)
 
+conn.commit()
 
-    # ===== SEED =====
-    users = [
-        (1, "0123456", "佐藤 太郎", 150000),
-        (2, "1234567", "鈴木 花子", 120000),
-        (3, "2345678", "高橋 次郎", 200000),
-        (4, "3456789", "田中 三郎", 80000),
-        (5, "4567890", "伊藤 美咲", 50000),
-        (6, "5678901", "渡辺 健一", 175000),
-    ]
-    cur.executemany(
-        "INSERT INTO users (id, account_number, name, balance) VALUES (?, ?, ?, ?)",
-        users
-    )
+for row in cursor.execute("SELECT * FROM users"):
+    print(row)
 
-    link_id = str(uuid.uuid4())
-    current_time = datetime.now().isoformat()
-    cur.execute(
-        "INSERT INTO request_links (id, sender_id, amount, message, status, created_at) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
-        (link_id, 1, 15000, "ランチ代です", "created", current_time)
-    )
+print()
 
-    conn.commit()
+for row in cursor.execute("SELECT * FROM send_histories"):
+    print(row)
+print()
 
-    # ===== 確認出力 =====
-    print("DB:", os.path.abspath(DB_FILE))
-    print("\n--- Tables ---")
-    for (name,) in cur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"):
-        print(name)
+cursor.execute("DROP TABLE IF EXISTS links")
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS links (
+    id INTEGER PRIMARY KEY,
+    sender_num TEXT,
+    receiver_num TEXT,
+    datetime TEXT,
+    amount INTEGER,
+    message TEXT,
+    status TEXT
+)
+""")
 
-    print("\n--- Users ---")
-    for row in cur.execute("SELECT id, account_number, name, balance FROM users ORDER BY id"):
-        print(row)
+link = (1, "0123456", "1234567", "2025-09-02 20:15:25", 500, "単体テスト", "Before")
+cursor.execute("INSERT INTO links (id, sender_num, receiver_num, datetime, amount, message, status) VALUES (?, ?, ?, ?, ?, ?, ?)", link)
+for row in cursor.execute("SELECT * FROM links"):
+    print(row)
 
-    print("\n--- Request Links ---")
-    for row in cur.execute("SELECT id, sender_id, amount, message, status, created_at FROM request_links"):
-        print(row)
-
-    #conn.close()
-
-
-    ##### 送金履歴テーブル #####
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS send_histories (
-        id INTEGER PRIMARY KEY,
-        sender_num TEXT,
-        receiver_num TEXT,
-        datetime TEXT,
-        amount INTEGER,
-        message TEXT
-    )
-    """)
-
-    ##### ユーザーテーブル #####
-    #cursor.execute("""
-    #CREATE TABLE IF NOT EXISTS users (
-    #    id INTEGER PRIMARY KEY,
-    #    account_number INTEGER,
-    #    name TEXT,
-    #    balance INTEGER
-    #)
-    #""")
-
-
-
-    for row in cur.execute("SELECT * FROM users"):
-        print(row)
-
-    for row in cur.execute("SELECT * FROM send_histories"):
-        print(row)
-
-
-    cur.close()
-    conn.close()
-
-
-
-
-if __name__ == "__main__":
-    main()
+cursor.close()
+conn.close()

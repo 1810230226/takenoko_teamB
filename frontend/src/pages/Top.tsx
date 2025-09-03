@@ -86,7 +86,8 @@ function Top() {
                     <span className="text-center text-lg">請求</span>
                     </Link>
                 </div>
-                <button
+                <Link
+                    to="/histories" // 👈 遷移先のパスをここに指定
                     className="relative flex items-center w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5"
                 >
                     {/* 中央にテキスト */}
@@ -100,8 +101,9 @@ function Top() {
                         alt="アイコン"
                         className="ml-auto w-3 h-3"
                     />
-                </button>
-                <button
+                </Link>
+                <Link
+                    to="/messages"
                     className="relative flex items-center w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5"
                 >
                     {/* 中央にテキスト */}
@@ -115,7 +117,7 @@ function Top() {
                         alt="アイコン"
                         className="ml-auto w-3 h-3"
                     />
-                </button>
+                </Link>
             </div>
 
         </>
