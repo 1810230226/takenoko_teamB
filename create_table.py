@@ -31,12 +31,12 @@ CREATE TABLE users (
 
 # 6人分の初期データ
 users = [
-    (1, "0123456", "佐藤 太郎", 150000, "/assets/images/icons/human1.png"),
-    (2, "1234567", "鈴木 花子", 120000, "/assets/images/icons/human2.png"),
-    (3, "2345678", "高橋 次郎", 200000, "/assets/images/icons/human3.png"),
-    (4, "3456789", "田中 真希", 80000, "/assets/images/icons/human4.png"),
-    (5, "4567890", "伊藤 美咲", 50000, "/assets/images/icons/human5.png"),
-    (6, "5678901", "渡辺 レミ", 175000, "/assets/images/icons/human6.png"),
+    (1, "0123456", "広末 涼子", 150000, "/assets/images/icons/human1.png"),
+    (2, "1234567", "国分 太一", 1200000, "/assets/images/icons/human2.png"),
+    (3, "2345678", "永野 芽郁", 200000, "/assets/images/icons/human3.png"),
+    (4, "3456789", "田中 圭", 80000, "/assets/images/icons/human4.png"),
+    (5, "4567890", "水原 一平", 50000, "/assets/images/icons/human5.png"),
+    (6, "5678901", "中居 正広", 175000, "/assets/images/icons/human6.png"),
 ]
 
 # INSERT OR IGNORE → idが重複する場合は無視される
