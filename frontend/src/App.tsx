@@ -1,5 +1,6 @@
 import { UserProvider } from "./context/UserContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
 import Top from "./pages/Top";
 import Top2 from "./pages/Top2";
 import Recipients from "./pages/Recipients";
@@ -13,6 +14,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="/" element={<Login />} />
                 <Route path="/top" element={<Top />} />
                 <Route path="/top2" element={<Top2 />} />
                 <Route path="/recipients" element={<Recipients />} />
