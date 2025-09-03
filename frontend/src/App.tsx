@@ -7,12 +7,17 @@ import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
 import Login from "./pages/Login";
+import RequestRecipients from "./pages/RequestRecipients";
+import RequestAmount from "./pages/RequestAmount";
+import AmountLink from "./pages/AmountLink";
 
 function App() {
     return (
         <UserProvider>
             <BrowserRouter>
                 <Routes>
+                    <Route path="/request/recipients" element={<RequestRecipients />} />
+                    <Route path="/request/amount" element={<RequestAmount />} />
                     <Route path="/top" element={<Top />} />
                     <Route path="/top2" element={<Top2 />} />
                     <Route path="/recipients" element={<Recipients />} />
@@ -20,6 +25,7 @@ function App() {
                     <Route path="/complete" element={<Complete />} />
                     <Route path="/request" element={<Request />} />
                     <Route path="/" element={<Login />} />
+                    <Route path="/amount/link" element={<AmountLink />} />
                 </Routes>
             </BrowserRouter>
         </UserProvider>
