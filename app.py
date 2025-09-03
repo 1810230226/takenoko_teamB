@@ -101,6 +101,6 @@ def get_user(user_id):
         return jsonify({"error": "User not found"}), 404
     return jsonify(dict(user))
 
-  
+
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=5001, debug=True)
