@@ -4,9 +4,13 @@ from datetime import datetime, timedelta
 import sqlite3
 import os
 import json
+from datetime import datetime
+import uuid
+
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+# CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+CORS(app)
 
 DB_FILE = os.path.join(app.root_path, "takenoko.db")
 
@@ -240,5 +244,31 @@ def get_history(user_num):
 
 
 
+@app.route("/api/request-links", methods=["POST"])
+def create_request_link():
+    data = request.get_json()
+    sender_id = data.get("sender_id")
+    amount = data.get("amount")
+    message = data.get("message", None)
+
+    if amount is None:
+        return jsonify({"error": "Amount is required"}), 400
+
+    link_id = str(uuid.uuid4())
+    created_at = datetime.utcnow().isoformat()
+
+    conn = get_db_connection()
+    conn.execute(
+        "INSERT INTO request_links (id, sender_id, amount, message, created_at) VALUES (?, ?, ?, ?, ?)",
+        (link_id, sender_id, amount, message, created_at)
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({"id": link_id, "link": f"/send?id={link_id}"})
+
+
+
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=5001, debug=True)
+
