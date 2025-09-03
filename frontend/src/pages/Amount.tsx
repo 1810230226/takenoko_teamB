@@ -70,7 +70,7 @@ function Amount() {
     };
 
     return (
-        <div className="mx-auto h-screen bg-orange-50 shadow-lg rounded-3xl overflow-hidden flex flex-col">
+        <div className="mx-auto h-screen bg-orange-50 shadow-lg overflow-hidden flex flex-col">
             {/* 追加：Recipientsと同じスタイルのヘッダー（タイトル無し） */}
             <header className="bg-rose-400 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
             {/* 左：戻るボタン（幅固定） */}
