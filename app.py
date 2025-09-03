@@ -55,9 +55,6 @@ def create_request_link():
 
     conn = get_db_connection()
     conn.execute(
-        "SELECT id FROM request_links WHERE id = ?", (sender_id)
-    )
-    conn.execute(
         "INSERT INTO request_links (id, sender_id, amount, message, created_at) VALUES (?, ?, ?, ?, ?)",
         (link_id, sender_id, amount, message, created_at)
     )

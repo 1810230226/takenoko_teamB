@@ -27,7 +27,7 @@ function Request() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:5001/api/request-links", {
+            const response = await fetch("http://localhost:5000/api/request-links", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -46,7 +46,6 @@ function Request() {
 
             setLink(data.link);
         } catch (err) {
-            console.error("エラー発生:", err);
             alert("リンク作成中にエラーが発生しました");
         } finally {
             setLoading(false);
