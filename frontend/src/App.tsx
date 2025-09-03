@@ -7,6 +7,8 @@ import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
 import Login from "./pages/Login";
+import ChatScreen from "./pages/Messages";
+import TransactionHistory from "./pages/TransactionHistory";
 
 function App() {
     return (
@@ -19,6 +21,8 @@ function App() {
                     <Route path="/amount" element={<Amount />} />
                     <Route path="/complete" element={<Complete />} />
                     <Route path="/request" element={<Request />} />
+                    <Route path="/histories" element={<TransactionHistory />} />
+                    <Route path="/messages" element={<ChatScreen />} />
                     <Route path="/" element={<Login />} />
                 </Routes>
             </BrowserRouter>
