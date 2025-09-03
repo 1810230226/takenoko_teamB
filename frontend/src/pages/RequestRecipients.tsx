@@ -8,6 +8,7 @@ type User = {
   name: string;
   account_number: string;
   balance: number;
+  icon_pass: string;
 };
 
 function RequestRecipients() {
@@ -56,13 +57,13 @@ function RequestRecipients() {
         {users.map((user) => (
           <li
 
-          
+
             key={user.id}
             className="flex items-center p-4 cursor-pointer hover:bg-orange-100"
             onClick={() => handleClick(user)}
           >
             <img
-              src="/assets/images/icons/human1.png"
+              src={user.icon_pass}
               alt={user.name}
               className="w-20 h-20 rounded-full mr-4"
             />
