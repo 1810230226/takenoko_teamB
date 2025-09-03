@@ -8,8 +8,8 @@ interface LocationState {
 function Complete() {
     const navigate = useNavigate();
     const location = useLocation();
-    const recipientName = "田中一郎";
-    const amount = 15000; // 数値で定義
+    const { recipientName } = location.state || {};
+    const { amount } = location.state || {};
 
   // 金額を3桁ごとにカンマ区切り
     const formattedAmount = amount.toLocaleString();

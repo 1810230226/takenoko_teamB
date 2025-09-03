@@ -33,7 +33,7 @@ function Recipients() {
 
     const handleClick = (user: User) => {
         console.log("選択:", user.name);
-        navigate("/amount", { state: { user } });
+        navigate("/amount", { state: { recipient: user } });
     };
 
     return (
