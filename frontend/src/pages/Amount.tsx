@@ -104,14 +104,13 @@ function Amount() {
                         </div>
                     </div>
 
-                    {/* 送る金額 */}
                     <div>
                         {amount && (
                             <label
                                 htmlFor="amount"
                                 className="block text-sm font-medium text-gray-500 mb-1"
                             >
-                                送る金額
+                                送金額
                             </label>
                         )}
 
