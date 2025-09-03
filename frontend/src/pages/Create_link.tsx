@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import { useSearchParams } from "react-router-dom";
 import { useSearchParams, useNavigate } from "react-router-dom"; 
-
+import toast from 'react-hot-toast'
 
 
 function CreateLink() {
@@ -37,7 +37,7 @@ function CreateLink() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(link).then(() => {
-      alert("リンクをコピーしました！");
+      toast.success("リンクをコピーしました！");
     });
   };
 
