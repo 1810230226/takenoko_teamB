@@ -20,6 +20,8 @@ import RequestAmount from "./pages/RequestAmount";
 import AmountLink from "./pages/AmountLink";
 import MessageRecipients from "./pages/MessageRecipients";
 
+import toast, { Toaster } from 'react-hot-toast'
+
 function App() {
     return (
 
@@ -44,6 +46,7 @@ function App() {
                     <Route path="/remit" element={<Remit />} />
 
                 </Routes>
+                <Toaster position="top-center" />
             </BrowserRouter>
         </UserProvider>
 
