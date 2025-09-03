@@ -6,7 +6,6 @@ import Recipients from "./pages/Recipients";
 import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
-<<<<<<< HEAD
 import Create_link from "./pages/Create_link";
 
 
@@ -23,25 +22,6 @@ function App() {
                 <Route path="/create-link" element={<Create_link />} />
             </Routes>
         </BrowserRouter>
-=======
-import Login from "./pages/Login";
-
-function App() {
-    return (
-        <UserProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/top" element={<Top />} />
-                    <Route path="/top2" element={<Top2 />} />
-                    <Route path="/recipients" element={<Recipients />} />
-                    <Route path="/amount" element={<Amount />} />
-                    <Route path="/complete" element={<Complete />} />
-                    <Route path="/request" element={<Request />} />
-                    <Route path="/" element={<Login />} />
-                </Routes>
-            </BrowserRouter>
-        </UserProvider>
->>>>>>> ae8d575111e3f4b4fdd4dd9e10b147e5d38c04e3
     );
 }
 

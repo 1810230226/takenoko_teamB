@@ -12,10 +12,10 @@ function CreateLink() {
 
   useEffect(() => {
     if (id) {
-      setLink(`http://localhost:3000/link-login?id=${id}`);
+      setLink(`http://localhost:5001/link-login?id=${id}`);
 
       // サーバーから request_link を取得
-      fetch(`http://localhost:3000/api/request_link/${id}`)
+      fetch(`http://localhost:5001/api/request-links/${id}`)
         .then((res) => {
           if (!res.ok) throw new Error("リンク情報の取得に失敗しました!");
           return res.json();
@@ -25,7 +25,6 @@ function CreateLink() {
           setLoading(false);
         })
         .catch((err) => {
-          console.error(err);
           setError("リンク情報の取得に失敗しました");
           setLoading(false);
         });
