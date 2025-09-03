@@ -9,6 +9,7 @@ import Complete from "./pages/Complete";
 import Request from "./pages/Request";
 import Create_link from "./pages/Create_link";
 import Link_login from "./pages/Link_login";
+import Remit from "./pages/Remit";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/request" element={<Request />} />
                 <Route path="/create-link" element={<Create_link />} />
                 <Route path="/link-login" element={<Link_login />} />
+                <Route path="/remit" element={<Remit />} />
             </Routes>
         </BrowserRouter>
     );

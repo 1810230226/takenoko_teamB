@@ -253,6 +253,8 @@ def create_request_link():
 
     if amount is None:
         return jsonify({"error": "Amount is required"}), 400
+    if sender_id is None:
+        return jsonify({"error": "Sender ID is required"}), 400
 
     link_id = str(uuid.uuid4())
     created_at = datetime.utcnow().isoformat()
@@ -262,39 +264,83 @@ def create_request_link():
         "INSERT INTO request_links (id, sender_id, amount, message, created_at) VALUES (?, ?, ?, ?, ?)",
         (link_id, sender_id, amount, message, created_at)
     )
+    print("リンク作成成功:", sender_id)
     conn.commit()
     conn.close()
 
     return jsonify({"id": link_id, "link": f"/link_login?id={link_id}"})
 
+
 @app.route("/api/request-links/<link_id>", methods=["GET"])
 def get_request_link(link_id):
     conn = get_db_connection()
     try:
+        # request_links テーブルから link を取得
         row = conn.execute(
-            "SELECT amount FROM request_links WHERE id = ?",
+            "SELECT id, sender_id, amount, message FROM request_links WHERE id = ?",
             (link_id,)
-        ).fetchone()  # ← これでOK（Rowを返す）
-
+        ).fetchone()
         if not row:
             return jsonify({"error": "Link not found"}), 404
 
-        return jsonify({"amount": row["amount"]}), 200
+        sender_id = row["sender_id"]
+
+        # sender_id からユーザー情報を取得
+        user_row = conn.execute(
+            "SELECT id, name, account_number, balance FROM users WHERE id = ?",
+            (sender_id,)
+        ).fetchone()
+        if not user_row:
+            return jsonify({"error": "Sender not found"}), 404
+
+        return jsonify({
+            "id": row["id"],
+            "amount": row["amount"],
+            "message": row["message"],
+            "sender": dict(user_row)  # 送金先ユーザー情報
+        }), 200
+
     finally:
         conn.close()
 
-@app.route("/api/link-login", methods=["POST"])
-def login():
-    data = request.get_json()
-    account_number = data.get("account_number")
+# request_links と sender を結合して取得
+@app.route("/api/request-links/<link_id>/recipient", methods=["GET"])
+def get_request_link_recipient(link_id):
     conn = get_db_connection()
-    user = conn.execute("SELECT * FROM users WHERE account_number = ?", (account_number,)).fetchone()
-    conn.close()
+    try:
+        # link_id から request_links レコードを取得
+        link_row = conn.execute(
+            "SELECT sender_id, amount FROM request_links WHERE id = ?",
+            (link_id,)
+        ).fetchone()
 
-    if user is None:
-        return jsonify({"error": "口座番号が存在しません"}), 404
+        if not link_row:
+            return jsonify({"error": "Link not found"}), 404
 
-    return jsonify(dict(user))
+        sender_id = link_row["sender_id"]
+        amount = link_row["amount"]
+
+        # sender_id からユーザー情報を取得
+        sender_row = conn.execute(
+            "SELECT id, account_number, name, balance FROM users WHERE id = ?",
+            (sender_id,)
+        ).fetchone()
+
+        if not sender_row:
+            return jsonify({"error": "Sender user not found"}), 404
+
+        # JSON で返す
+        return jsonify({
+            "recipient": {
+                "id": sender_row["id"],
+                "account_number": sender_row["account_number"],
+                "name": sender_row["name"],
+                "balance": sender_row["balance"]
+            },
+            "amount": amount
+        })
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":

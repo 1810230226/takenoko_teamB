@@ -17,19 +17,11 @@ function Complete() {
     return (
         <div className="mx-auto h-screen bg-orange-50 shadow-lg rounded-3xl overflow-hidden flex flex-col justify-center items-center py-20 px-6">
         <div className="flex flex-col items-center text-center">
-            <div className="bg-green-100 rounded-full p-4 mb-4">
-            <svg
-                className="w-40 h-40 text-green-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-
-            </svg>
+            <div className="flex h-40 w-40 items-center justify-center rounded-full bg-green-100 p-4">
+                <img src="/assets/images/icons/check.svg" alt="リンクアイコン" className="h-40 w-40" />
             </div>
-            <p className="text-xl font-bold text-gray-800">送金完了</p>
-        </div>
+                    <p className="text-xl font-bold text-gray-800">送金完了</p>
+                </div>
 
         <div className="flex items-center text-center p-6 mt-8">
             <img

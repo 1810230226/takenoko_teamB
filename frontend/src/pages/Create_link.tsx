@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom"; 
+
+
 
 function CreateLink() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
+  const navigate = useNavigate();
 
   const [link, setLink] = useState("");
   const [amount, setAmount] = useState<number | null>(null); // 金額用の state
@@ -12,7 +16,7 @@ function CreateLink() {
 
   useEffect(() => {
     if (id) {
-      setLink(`http://localhost:5001/link-login?id=${id}`);
+      setLink(`http://localhost:3000/link-login?id=${id}`);
 
       // サーバーから request_link を取得
       fetch(`http://localhost:5001/api/request-links/${id}`)
@@ -35,6 +39,10 @@ function CreateLink() {
     navigator.clipboard.writeText(link).then(() => {
       alert("リンクをコピーしました！");
     });
+  };
+
+const handleGoTop = () => {
+    navigate("/top"); // ← ここでトップに遷移
   };
 
   if (!id) {
@@ -65,9 +73,9 @@ function CreateLink() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-6 font-sans">
       <div className="flex w-full max-w-sm flex-grow flex-col items-center justify-center">
         {/* Icon Section */}
-        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-green-100 p-4">
-          {/* <LinkIcon className="h-16 w-16 text-green-500" /> */}
-        </div>
+    <div className="flex h-40 w-40 items-center justify-center rounded-full bg-green-100 p-4">
+        <img src="/assets/images/icons/link.svg" alt="リンクアイコン" className="h-40 w-40" />
+    </div>
 
         {/* Text Section */}
         <div className="mt-8 text-center">
@@ -89,7 +97,7 @@ function CreateLink() {
           {/* <DocumentDuplicateIcon className="ml-2 h-5 w-5 text-gray-500" /> */}
         </button>
 
-        <button className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white py-4 font-medium text-gray-700 shadow-sm transition-colors duration-200 hover:bg-gray-100">
+        <button onClick={handleGoTop}  className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white py-4 font-medium text-gray-700 shadow-sm transition-colors duration-200 hover:bg-gray-100">
           <span className="text-base">トップに戻る</span>
           {/* <ChevronRightIcon className="ml-2 h-5 w-5 text-gray-500" /> */}
         </button>
