@@ -16,6 +16,7 @@ def main():
     cur.execute("DROP TABLE IF EXISTS request_links")
     cur.execute("DROP TABLE IF EXISTS users")
 
+
     # ===== CREATE (親 → 子) =====
     cur.execute("""
     CREATE TABLE users (
@@ -37,6 +38,7 @@ def main():
         FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
     )
     """)
+
 
     # ===== SEED =====
     users = [
@@ -76,7 +78,46 @@ def main():
     for row in cur.execute("SELECT id, sender_id, amount, message, status, created_at FROM request_links"):
         print(row)
 
+    #conn.close()
+
+
+    ##### 送金履歴テーブル #####
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS send_histories (
+        id INTEGER PRIMARY KEY,
+        sender_num TEXT,
+        receiver_num TEXT,
+        datetime TEXT,
+        amount INTEGER,
+        message TEXT
+    )
+    """)
+
+    ##### ユーザーテーブル #####
+    #cursor.execute("""
+    #CREATE TABLE IF NOT EXISTS users (
+    #    id INTEGER PRIMARY KEY,
+    #    account_number INTEGER,
+    #    name TEXT,
+    #    balance INTEGER
+    #)
+    #""")
+
+
+
+    for row in cur.execute("SELECT * FROM users"):
+        print(row)
+
+    for row in cur.execute("SELECT * FROM send_histories"):
+        print(row)
+
+
+    cur.close()
     conn.close()
+
+
+
 
 if __name__ == "__main__":
     main()
