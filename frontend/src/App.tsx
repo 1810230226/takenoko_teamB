@@ -9,21 +9,29 @@ import Complete from "./pages/Complete";
 import Request from "./pages/Request";
 import Create_link from "./pages/Create_link";
 
+import RequestRecipients from "./pages/RequestRecipients";
+import RequestAmount from "./pages/RequestAmount";
+import AmountLink from "./pages/AmountLink";
 
 function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/top" element={<Top />} />
-                <Route path="/top2" element={<Top2 />} />
-                <Route path="/recipients" element={<Recipients />} />
-                <Route path="/amount" element={<Amount />} />
-                <Route path="/complete" element={<Complete />} />
-                <Route path="/request" element={<Request />} />
-                <Route path="/create-link" element={<Create_link />} />
-            </Routes>
-        </BrowserRouter>
+        <UserProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/request/recipients" element={<RequestRecipients />} />
+                    <Route path="/request/amount" element={<RequestAmount />} />
+                    <Route path="/top" element={<Top />} />
+                    <Route path="/top2" element={<Top2 />} />
+                    <Route path="/recipients" element={<Recipients />} />
+                    <Route path="/amount" element={<Amount />} />
+                    <Route path="/complete" element={<Complete />} />
+                    <Route path="/request" element={<Request />} />
+                    <Route path="/" element={<Login />} />
+                    <Route path="/amount/link" element={<AmountLink />} />
+                    <Route path="/create-link" element={<Create_link />} />
+                </Routes>
+            </BrowserRouter>
+        </UserProvider>
     );
 }
 
