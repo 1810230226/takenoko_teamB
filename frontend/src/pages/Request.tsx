@@ -41,7 +41,7 @@ function Request() {
 
             // ここで遷移
             // data.id など、バックエンドが返すリンクIDに置き換えてください
-            navigate(`/create-link?id=403f5480-96a7-417b-aba1-d285e380448f`);
+            navigate(`/create-link?id=${data.id}`);
         } catch (err) {
             alert("リンク作成中にエラーが発生しました");
         } finally {
