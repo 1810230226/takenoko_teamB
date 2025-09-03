@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import BackButton from "../components/BackButton";
 function Request() {
     const [amount, setAmount] = useState("");
     const [message, setMessage] = useState("");
@@ -51,25 +51,36 @@ function Request() {
 
     return (
         <div className="mx-auto h-screen bg-white shadow-lg flex flex-col">
-            <header className="bg-cyan-600 text-white text-center p-4 font-bold text-lg">
-                請求リンクの作成
-            </header>
 
-            <div className="p-6 flex-grow flex flex-col justify-between">
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                    <div>
-                        <label htmlFor="request-amount" className="block text-gray-500 font-medium mb-2">
-                            請求金額
-                        </label>
-                        <input
-                            type="text"
-                            id="request-amount"
-                            placeholder="例: 15,000"
-                            value={amount}
-                            onChange={(e) => setAmount(formatNumber(e.target.value))}
-                            className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg text-gray-900 font-bold bg-gray-100"
-                        />
-                    </div>
+        <header className="bg-cyan-600 text-white p-4 font-bold text-lg grid grid-cols-[auto_1fr_auto] items-center">
+        {/* 左：戻るボタン */}
+        <div className="w-6">
+            <BackButton />
+        </div>
+
+        {/* 中央：タイトル */}
+        <h1 className="text-center">請求リンクの作成</h1>
+
+        {/* 右：ダミー（中央を保つため） */}
+        <div className="w-6" aria-hidden />
+        </header>
+        <div className="p-6 flex-grow flex flex-col justify-between">
+            <form className="space-y-6">
+            <div>
+                <label
+                htmlFor="request-amount"
+                className="block text-gray-500 font-medium mb-2"
+                >
+                請求金額
+                </label>
+                <input
+                type="text"
+                id="request-amount"
+                defaultValue="15,000 円"
+                className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg text-gray-900 font-bold bg-gray-100"
+                />
+            </div>
+
 
                     <div>
                         <label htmlFor="message" className="block text-gray-500 font-medium mb-2">

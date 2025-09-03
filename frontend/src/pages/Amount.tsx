@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { CircleAlert } from "lucide-react";
+import BackButton from "../components/BackButton";
 
 
 function Amount() {
@@ -68,40 +70,47 @@ function Amount() {
     };
 
     return (
-        <div className="mx-auto h-screen bg-orange-50 shadow-lg rounded-3xl overflow-hidden flex flex-col">
+        <div className="mx-auto h-screen bg-orange-50 shadow-lg overflow-hidden flex flex-col">
+            {/* 追加：Recipientsと同じスタイルのヘッダー（タイトル無し） */}
+            <header className="bg-rose-400 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
+            {/* 左：戻るボタン（幅固定） */}
+            <div className="w-6">
+                <BackButton />
+            </div>
+            {/* 中央：空（タイトル無し） */}
+            <h1 className="text-center">送金する</h1>
+            <div />
+            {/* 右：ダミー（左右バランス用） */}
+            <div className="w-6" aria-hidden />
+            </header>
             <div className="p-6 text-center">
                 <div className="flex items-center">
                     <img
                         src="/assets/images/icons/human1.png"
-                        alt="田中一郎"
-                        className="w-32 h-32 rounded-full mb-4"
+                        alt=""
+                        className="w-32 h-32 rounded-full"
                     />
-                    <div className="flex flex-col ml-10">
-                        <p className="text-xl text-gray-800">{recipient.name}さんに</p>
-                        <p className="text-xl text-gray-800 font-bold">送金する</p>
+                    <div className="flex flex-col ml-8">
+                        <p className="text-xl text-gray-800 font-bold">{recipient.name} さん</p>
                     </div>
                 </div>
             </div>
 
-            <div className="flex-grow p-6">
-                <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="flex-grow px-6">
+                <form className="space-y-2" onSubmit={handleSubmit}>
                     {/* 上限額 */}
                     <div>
                         <label
                             htmlFor="transfer-limit"
-                            className="block text-sm font-medium text-gray-500 mb-1"
+                            className="block text-sm font-medium text-gray-500 mb-1 ml-1"
                         >
                             送金上限額
                         </label>
-                        <div className="relative">
-                            <input
-                                type="text"
-                                id="transfer-limit"
-                                value={`${TRANSFER_LIMIT?.toLocaleString()} 円`}
-                                className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-gray-900 text-lg font-bold bg-white"
-                                readOnly
-                            />
+                        <div className="w-full p-4 text-gray-900 text-2xl font-bold">
+                            {TRANSFER_LIMIT?.toLocaleString()}
+                            <span className="text-base ml-2">円</span>
                         </div>
+
                     </div>
 
                     <div>
@@ -109,31 +118,39 @@ function Amount() {
 
                         <label
                             htmlFor="amount"
-                            className="block text-sm font-medium text-gray-500 mb-1"
+                            className="block text-sm font-medium text-gray-500 mb-1 ml-1"
                         >
-                            送る金額
+                            送金額
                         </label>
 
 
                         <div className="w-full max-w-sm">
-                            <input
-                                type="text"
-                                id="amount"
-                                placeholder="送る金額"
-                                value={amount}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    const value = e.target.value.replace(/,/g, "");
-                                    if (/^\d*$/.test(value)) {
-                                        setAmount(value ? formatNumber(Number(value)) : "");
-                                        setError(false); // 入力中はエラー解除
-                                    }
-                                }}
-                                className={`block w-full rounded-md shadow-sm p-4 text-lg bg-white ${error ? "border-red-600 bg-red-100" : "border border-gray-300"
-                                    }`}
-                            />
+                            <div className="flex items-center rounded-md">
+                                <input
+                                    type="text"
+                                    id="amount"
+                                    placeholder="送金額"
+                                    value={amount}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        const value = e.target.value.replace(/,/g, "");
+                                        if (/^\d*$/.test(value)) {
+                                            setAmount(value ? formatNumber(Number(value)) : "");
+                                            setError(false); // 入力中はエラー解除
+                                        }
+                                    }}
+                                    className={`block w-full rounded-md shadow-sm p-4 text-lg bg-white ${error ? "border-red-600 bg-red-100" : "border border-gray-300"
+                                        }`}
+                                />
+                                <span className="px-3 text-lg text-gray-700">円</span>
+                            </div>
                             {/* 常に高さを確保するため空文字も入れる */}
-                            <p className="text-red-600 text-sm h-5">
-                                {error ? "上限を超えています" : ""}
+                            <p className="flex items-center text-red-600 text-sm h-5 ml-2">
+                            {error && (
+                                <>
+                                <CircleAlert className="w-4 h-4 mr-1" />
+                                送金上限額を超えています
+                                </>
+                            )}
                             </p>
                         </div>
 
