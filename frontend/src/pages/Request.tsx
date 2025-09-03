@@ -66,20 +66,22 @@ function Request() {
         </header>
         <div className="p-6 flex-grow flex flex-col justify-between">
             <form className="space-y-6">
-            <div>
-                <label
-                htmlFor="request-amount"
-                className="block text-gray-500 font-medium mb-2"
-                >
-                請求金額
-                </label>
-                <input
-                type="text"
-                id="request-amount"
-                defaultValue="15,000 円"
-                className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg text-gray-900 font-bold bg-gray-100"
-                />
-            </div>
+        <div>
+        <label
+            htmlFor="request-amount"
+            className="block text-gray-500 font-medium mb-2"
+        >
+            請求金額
+        </label>
+        <input
+            type="text"
+            id="request-amount"
+            placeholder="金額を入力"
+            value={amount}
+            onChange={(e) => setAmount(formatNumber(e.target.value))}
+            className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg text-gray-900 font-bold bg-gray-100"
+        />
+        </div>
 
 
                     <div>
