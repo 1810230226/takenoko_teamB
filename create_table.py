@@ -66,6 +66,33 @@ CREATE TABLE IF NOT EXISTS links (
 )
 """)
 
+
+
+
+
+cursor.execute("""
+CREATE TABLE request_links (
+    id TEXT PRIMARY KEY,
+    sender_id INTEGER NOT NULL,
+    amount INTEGER NOT NULL,
+    message TEXT,
+    status TEXT NOT NULL DEFAULT 'created',
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
+)
+""")
+
+
+
+
+
+
+
+
+
+
+
+
 link = (1, "0123456", "1234567", "2025-09-02 20:15:25", 500, "単体テスト", "Before")
 cursor.execute("INSERT INTO links (id, sender_num, receiver_num, datetime, amount, message, status) VALUES (?, ?, ?, ?, ?, ?, ?)", link)
 for row in cursor.execute("SELECT * FROM links"):

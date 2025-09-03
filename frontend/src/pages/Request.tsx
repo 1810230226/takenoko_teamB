@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
+import { useUser } from "../context/UserContext";
+
 function Request() {
+    const { user } = useUser();
     const [amount, setAmount] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [linkInfo, setLinkInfo] = useState<any>(null); // 作成リンク情報を保持
     const navigate = useNavigate();
 
     const formatNumber = (num: string) => {
@@ -16,6 +20,11 @@ function Request() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if (!user || !user.id) {
+            alert("ログインしてください");
+            return;
+        }
+
         if (!amount) {
             alert("請求金額を入力してください。");
             return;
@@ -25,11 +34,12 @@ function Request() {
         setLoading(true);
 
         try {
+            // 請求リンク作成
             const response = await fetch("http://localhost:5001/api/request-links", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    sender_id: 1,
+                    sender_id: user.id,
                     amount: numericAmount,
                     message: message || "",
                 }),
@@ -38,49 +48,49 @@ function Request() {
             if (!response.ok) throw new Error("リンク作成に失敗しました");
 
             const data = await response.json();
+            const linkId = data.id;
 
-            // ここで遷移
-            // data.id など、バックエンドが返すリンクIDに置き換えてください
-            navigate(`/create-link?id=${data.id}`);
+            // 作成したリンク情報を取得
+            const resInfo = await fetch(`http://localhost:5001/api/request-links/${linkId}`);
+            if (!resInfo.ok) throw new Error("リンク情報の取得に失敗しました");
+            const info = await resInfo.json();
+            setLinkInfo(info);
+
+            // 必要に応じてページ遷移
+            navigate(`/create-link?id=${linkId}`);
         } catch (err) {
+            console.error(err);
             alert("リンク作成中にエラーが発生しました");
         } finally {
             setLoading(false);
         }
     };
 
+    // 作成フォーム
     return (
         <div className="mx-auto h-screen bg-white shadow-lg flex flex-col">
 
-        <header className="bg-cyan-600 text-white p-4 font-bold text-lg grid grid-cols-[auto_1fr_auto] items-center">
-        {/* 左：戻るボタン */}
-        <div className="w-6">
-            <BackButton />
-        </div>
+            <header className="bg-cyan-600 text-white p-4 font-bold text-lg grid grid-cols-[auto_1fr_auto] items-center">
+                <div className="w-6"><BackButton /></div>
+                <h1 className="text-center">請求リンクの作成</h1>
+                <div className="w-6" aria-hidden />
+            </header>
 
-        {/* 中央：タイトル */}
-        <h1 className="text-center">請求リンクの作成</h1>
-
-        {/* 右：ダミー（中央を保つため） */}
-        <div className="w-6" aria-hidden />
-        </header>
-        <div className="p-6 flex-grow flex flex-col justify-between">
-            <form className="space-y-6">
-            <div>
-                <label
-                htmlFor="request-amount"
-                className="block text-gray-500 font-medium mb-2"
-                >
-                請求金額
-                </label>
-                <input
-                type="text"
-                id="request-amount"
-                defaultValue="15,000 円"
-                className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg text-gray-900 font-bold bg-gray-100"
-                />
-            </div>
-
+            <div className="p-6 flex-grow flex flex-col justify-between">
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                    <div>
+                        <label htmlFor="request-amount" className="block text-gray-500 font-medium mb-2">
+                            請求金額
+                        </label>
+                        <input
+                            type="text"
+                            id="request-amount"
+                            placeholder="金額を入力"
+                            value={amount}
+                            onChange={(e) => setAmount(formatNumber(e.target.value))}
+                            className="block w-full rounded-md border-gray-300 shadow-sm p-4 text-lg text-gray-900 font-bold bg-gray-100"
+                        />
+                    </div>
 
                     <div>
                         <label htmlFor="message" className="block text-gray-500 font-medium mb-2">

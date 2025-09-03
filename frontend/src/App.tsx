@@ -12,6 +12,8 @@ import TransactionHistory from "./pages/TransactionHistory";
 import LinkLogin from "./pages/LinkLogin";
 import LinkSend from "./pages/LinkSend";
 import Create_link from "./pages/Create_link";
+import Link_login from "./pages/Link_login";
+import Remit from "./pages/Remit";
 
 import RequestRecipients from "./pages/RequestRecipients";
 import RequestAmount from "./pages/RequestAmount";
@@ -20,6 +22,7 @@ import MessageRecipients from "./pages/MessageRecipients";
 
 function App() {
     return (
+
         <UserProvider>
             <BrowserRouter>
                 <Routes>
@@ -34,10 +37,11 @@ function App() {
                     <Route path="/histories" element={<TransactionHistory />} />
                     <Route path="/messages" element={<ChatScreen />} />
                     <Route path="/" element={<Login />} />
-                    <Route path="/link-login" element={<LinkLogin />} />
+                    <Route path="/link-login" element={<Link_login />} />
                     <Route path="/link-send" element={<LinkSend />} />
                     <Route path="/create-link" element={<Create_link />} />
                     <Route path="/messages/recipients" element={<MessageRecipients />} />
+                    <Route path="/remit" element={<Remit />} />
 
                 </Routes>
             </BrowserRouter>
