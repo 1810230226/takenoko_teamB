@@ -40,24 +40,20 @@ def send_money():
             return jsonify({"status": 1, "message": "送金者が存在しません"}), 400
         if sender_row[0] < amount:
             return jsonify({"status": 1, "message": "残高不足"}), 400
-
         # 受金者の存在確認
         cursor.execute("SELECT balance FROM users WHERE account_number = ?", (receiver_num,))
         receiver_row = cursor.fetchone()
         if receiver_row is None:
             return jsonify({"status": 1, "message": "受金者が存在しません"}), 400
-
         # 送金処理
         cursor.execute("UPDATE users SET balance = balance - ? WHERE account_number = ?", (amount, sender_num))
         cursor.execute("UPDATE users SET balance = balance + ? WHERE account_number = ?", (amount, receiver_num))
-
         conn.execute(
             "INSERT INTO send_histories (sender_num, receiver_num, datetime, amount, message) VALUES (?, ?, ?, ?, ?)",
             (sender_num, receiver_num, current_date, amount, message)
         )
 
         conn.commit()  # コミット
-
         return jsonify({"status": 0, "message": f"{sender_num}から{receiver_num}へ{amount}円送金完了"})
 
     except Exception as e:
@@ -72,11 +68,8 @@ def send_money():
 
 @app.route("/api/login", methods=["POST"])
 def login():
-    print("aaaa")
     data = request.get_json()
     account_number = data.get("account_number")
-
-    print(account_number)
     conn = get_db_connection()
     user = conn.execute("SELECT * FROM users WHERE account_number = ?", (account_number,)).fetchone()
     conn.close()
