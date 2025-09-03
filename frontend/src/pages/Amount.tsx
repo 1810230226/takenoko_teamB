@@ -32,7 +32,7 @@ function Amount() {
         }
 
         try {
-            const res = await fetch("http://localhost:5000/api/sendmoney", {
+            const res = await fetch("http://localhost:5001/api/sendmoney", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

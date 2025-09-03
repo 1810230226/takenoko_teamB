@@ -19,7 +19,7 @@ function Recipients() {
     useEffect(() => {
         (async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/users");
+                const res = await fetch("http://localhost:5001/api/users");
                 const data: User[] = await res.json();
                 const filtered = typeof excludeUserId === "number"
                 ? data.filter(u => u.id !== excludeUserId)
