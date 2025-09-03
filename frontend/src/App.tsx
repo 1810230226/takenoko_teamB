@@ -11,12 +11,17 @@ import LinkLogin from "./pages/LinkLogin";
 import LinkSend from "./pages/LinkSend";
 import Create_link from "./pages/Create_link";
 
+import RequestRecipients from "./pages/RequestRecipients";
+import RequestAmount from "./pages/RequestAmount";
+import AmountLink from "./pages/AmountLink";
 
 function App() {
     return (
         <UserProvider>
             <BrowserRouter>
                 <Routes>
+                    <Route path="/request/recipients" element={<RequestRecipients />} />
+                    <Route path="/request/amount" element={<RequestAmount />} />
                     <Route path="/top" element={<Top />} />
                     <Route path="/top2" element={<Top2 />} />
                     <Route path="/recipients" element={<Recipients />} />
