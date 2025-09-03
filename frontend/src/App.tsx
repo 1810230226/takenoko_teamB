@@ -7,6 +7,8 @@ import Recipients from "./pages/Recipients";
 import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
+import LinkLogin from "./pages/LinkLogin";
+import LinkSend from "./pages/LinkSend";
 import Create_link from "./pages/Create_link";
 
 import RequestRecipients from "./pages/RequestRecipients";
@@ -27,11 +29,14 @@ function App() {
                     <Route path="/complete" element={<Complete />} />
                     <Route path="/request" element={<Request />} />
                     <Route path="/" element={<Login />} />
-                    <Route path="/amount/link" element={<AmountLink />} />
+                    <Route path="/link-login" element={<LinkLogin />} />
+                    <Route path="/link-send" element={<LinkSend />} />
                     <Route path="/create-link" element={<Create_link />} />
+
                 </Routes>
             </BrowserRouter>
         </UserProvider>
+
     );
 }
 
