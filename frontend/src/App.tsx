@@ -37,7 +37,7 @@ function App() {
                     <Route path="/histories" element={<TransactionHistory />} />
                     <Route path="/messages" element={<ChatScreen />} />
                     <Route path="/" element={<Login />} />
-                    <Route path="/link-login" element={<LinkLogin />} />
+                    <Route path="/link-login" element={<Link_login />} />
                     <Route path="/link-send" element={<LinkSend />} />
                     <Route path="/create-link" element={<Create_link />} />
                     <Route path="/messages/recipients" element={<MessageRecipients />} />
