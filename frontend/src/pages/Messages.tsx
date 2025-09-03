@@ -1,5 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import BackButton from "../components/BackButton";
 
 // ----------------------------------------------------
 // 型定義は前回の回答と同じ
@@ -142,16 +143,20 @@ const MessageCard: React.FC<MessageCardProps> = ({ message, isReceived }) => {
 // ----------------------------------------------------
 const ChatScreen = () => {
     const navigate = useNavigate();
-    
+    const location = useLocation();
+    const recipient = (location.state as any)?.recipient;
+    const headerName = recipient?.name ?? "メッセージ";
 
     return (
         <div className="mx-auto h-screen bg-gray-100 shadow-lg overflow-hidden flex flex-col">
             <div className="w-full bg-green-500 p-4 text-center text-white flex items-center justify-center relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                    {/* 左矢印アイコンなど */}
+                    <div className="w-6">
+                        <BackButton />
+                    </div>
                 </div>
                 <img src="/assets/images/icons/human2.png" alt="User Icon" className="w-8 h-8 rounded-full mr-2" />
-                <h1 className="text-xl font-bold">大谷 翔平</h1>
+                <h1 className="text-xl font-bold">{headerName}</h1>
             </div>
 
             <div className="p-4 flex-grow overflow-y-auto">

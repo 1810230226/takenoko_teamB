@@ -103,7 +103,7 @@ function Top() {
                     />
                 </Link>
                 <Link
-                    to="/messages"
+                    to="/messages/recipients"
                     className="relative flex items-center w-full max-w-md px-6 py-4 bg-white text-black font-bold rounded-xl text-lg border-2 border-gray mb-5"
                 >
                     {/* 中央にテキスト */}
