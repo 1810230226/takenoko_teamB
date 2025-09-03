@@ -7,6 +7,9 @@ import Amount from "./pages/Amount";
 import Complete from "./pages/Complete";
 import Request from "./pages/Request";
 import Login from "./pages/Login";
+import LinkLogin from "./pages/LinkLogin";
+import LinkSend from "./pages/LinkSend";
+
 
 function App() {
     return (
@@ -20,6 +23,9 @@ function App() {
                     <Route path="/complete" element={<Complete />} />
                     <Route path="/request" element={<Request />} />
                     <Route path="/" element={<Login />} />
+                    <Route path="/link-login" element={<LinkLogin />} />
+                    <Route path="/link-send" element={<LinkSend />} />
+
                 </Routes>
             </BrowserRouter>
         </UserProvider>
