@@ -86,7 +86,7 @@ function Amount() {
             <div className="p-6 text-center">
                 <div className="flex items-center">
                     <img
-                        src="/assets/images/icons/human1.png"
+                        src={recipient.icon_pass}
                         alt=""
                         className="w-32 h-32 rounded-full"
                     />

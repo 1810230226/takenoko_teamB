@@ -39,7 +39,7 @@ function RequestAmount() {
         {recipient && (
           <div className="flex items-center">
             <img
-              src="/assets/images/icons/human1.png"
+              src={recipient.icon_pass}
               alt=""
               className="w-32 h-32 rounded-full"
             />
