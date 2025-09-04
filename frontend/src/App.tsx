@@ -44,6 +44,7 @@ function App() {
                     <Route path="/create-link" element={<Create_link />} />
                     <Route path="/messages/recipients" element={<MessageRecipients />} />
                     <Route path="/remit" element={<Remit />} />
+                    <Route path="/amount/link" element={<AmountLink />} />
 
                 </Routes>
                 <Toaster position="top-center" />
