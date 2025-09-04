@@ -22,7 +22,9 @@ import RequestAmount from "./pages/RequestAmount";
 import AmountLink from "./pages/AmountLink";
 import MessageRecipients from "./pages/MessageRecipients";
 
-import toast, { Toaster } from "react-hot-toast";
+
+import toast, { Toaster } from 'react-hot-toast'
+import RequestComplete from "./pages/RequestComplete";
 
 function App() {
   return (
@@ -49,12 +51,12 @@ function App() {
           <Route path="/linklogin" element={<LinkLogin />} />
           <Route path="/recieve" element={<Recieve />} />
           <Route path="/finish" element={<Finish />} />
+          <Route path="/request/complete" element={<RequestComplete />} />
         </Routes>
         <Toaster position="top-center" />
       </BrowserRouter>
     </UserProvider>
   );
-
 }
 
 export default App;

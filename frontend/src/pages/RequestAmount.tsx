@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
+import { useUser } from "../context/UserContext";
 
 function RequestAmount() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useUser();
   // Recipients（請求相手を選択）で選んだ相手が入ってくる想定
   const { recipient } = (location.state as any) || {};
 
@@ -18,9 +20,32 @@ function RequestAmount() {
     e.preventDefault();
     if (!amount) return;
 
+    // --- メッセージ（請求）をローカルに保存して Messages 画面に反映させる ---
+    try {
+      const yen = Number(String(amount).replace(/,/g, ""));
+      const record = {
+        fromId: user?.id,
+        toId: recipient?.id,
+        type: "request",
+        amount: yen,
+        message,
+        timeISO: new Date().toISOString(),
+        status: "支払い待ち",
+        isRead: false,
+      };
+      const all = JSON.parse(localStorage.getItem("app_messages") || "[]");
+      all.push(record);
+      localStorage.setItem("app_messages", JSON.stringify(all));
+    } catch (e) {
+      // 保存失敗時も画面遷移自体は続行
+      console.warn("failed to persist request message:", e);
+    }
+
     // ここではバックエンド呼び出しは行わず、Request 画面に遷移して続き（リンク生成など）を行う
     const yen = Number(String(amount).replace(/,/g, ""));
-    navigate("/request", { state: { recipient, amount: yen } });
+    navigate("/request/complete", {
+      state: { recipient, amount: yen, message },
+    });
   };
 
   return (
