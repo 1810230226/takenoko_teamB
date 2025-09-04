@@ -167,10 +167,10 @@ function TransactionHistory() {
             </div>
 
             <div className="p-6 flex-grow">
-                {transactionData.map((periodSection) => (
+                {transactionData.slice().reverse().map((periodSection) => (
                     <div key={periodSection.period} className="mb-6">
                         <h2 className="text-sm text-gray-600 font-bold mb-3">{periodSection.period}</h2>
-                        {periodSection.transactions.map((transaction, index) => (
+                        {periodSection.transactions.slice().reverse().map((transaction, index) => (
                             <TransactionCard key={index} transaction={transaction} />
                         ))}
                     </div>
