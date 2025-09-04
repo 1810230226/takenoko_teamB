@@ -110,6 +110,27 @@ useEffect(() => {
 
             const data = await res.json();
             setUser({ ...user!, balance: user!.balance - numericAmount });
+            // 送金が成功したら対応する請求メッセージを localStorage 上で「済み」にする
+            try {
+                const all = JSON.parse(localStorage.getItem("app_messages") || "[]");
+                for (let i = all.length - 1; i >= 0; i--) {
+                    const r = all[i];
+                    if (
+                        r &&
+                        r.type === "request" &&
+                        r.fromId === (recipient?.id) &&           // 請求者
+                        r.toId === (user?.id) &&                  // 自分 = 支払者
+                        r.amount === numericAmount &&
+                        r.status === "支払い待ち"
+                    ) {
+                        all[i].status = "済み";
+                        break;
+                    }
+                }
+                localStorage.setItem("app_messages", JSON.stringify(all));
+            } catch (e) {
+                console.warn("failed to mark request as paid:", e);
+            }
             navigate("/complete", { state: { recipientName: recipient.name, amount: numericAmount } });
         } catch (err) {
             console.error(err);
