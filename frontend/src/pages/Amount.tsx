@@ -91,7 +91,7 @@ function Amount() {
                         className="w-32 h-32 rounded-full"
                     />
                     <div className="flex flex-col ml-8">
-                        <p className="text-xl text-gray-800 font-bold">{recipient.name} さん</p>
+                        <p className="text-xl text-gray-800 font-bold">{recipient.name} さんへ</p>
                     </div>
                 </div>
             </div>
