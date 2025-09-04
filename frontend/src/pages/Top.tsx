@@ -98,7 +98,7 @@ function Top() {
                 >
                     {/* 中央にテキスト */}
                     <span className="absolute left-1/2 transform -translate-x-1/2">
-                        請求履歴
+                        履歴
                     </span>
 
                     {/* 右にアイコン */}

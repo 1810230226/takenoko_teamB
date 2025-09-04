@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 interface LocationState {
   amount: number;
   recipientName: string;
+  iconPath: string;
 }
 
 function Complete() {
@@ -10,6 +11,7 @@ function Complete() {
     const location = useLocation();
     const { recipientName } = location.state || {};
     const { amount } = location.state || {};
+    const { iconPath } = location.state || {};
 
   // 金額を3桁ごとにカンマ区切り
     const formattedAmount = amount.toLocaleString();
@@ -25,7 +27,7 @@ function Complete() {
 
         <div className="flex items-center text-center p-6 mt-8">
             <img
-            src="/assets/images/icons/human1.png"
+            src={iconPath}
             alt={recipientName}
             className="w-32 h-32 rounded-full mr-4"
             />

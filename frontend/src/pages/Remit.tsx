@@ -117,7 +117,7 @@ useEffect(() => {
                 <div className="flex items-center">
                     <img src="/assets/images/icons/human1.png" alt="" className="w-32 h-32 rounded-full" />
                     <div className="flex flex-col ml-8">
-                        <p className="text-xl font-bold">{recipient.name} さん</p>
+                        <p className="text-xl font-bold">{recipient.name} さんへ</p>
                     </div>
                 </div>
             </div>

@@ -64,7 +64,8 @@ function Amount() {
         navigate("/complete", {
             state: {
                 recipientName: recipient.name,
-                amount: Number(amount.replace(/,/g, ""))
+                amount: Number(amount.replace(/,/g, "")),
+                iconPath: recipient.icon_pass
             },
         }); // complete画面に遷移
     };
@@ -91,7 +92,7 @@ function Amount() {
                         className="w-32 h-32 rounded-full"
                     />
                     <div className="flex flex-col ml-8">
-                        <p className="text-xl text-gray-800 font-bold">{recipient.name} さん</p>
+                        <p className="text-xl text-gray-800 font-bold">{recipient.name} さんへ</p>
                     </div>
                 </div>
             </div>
