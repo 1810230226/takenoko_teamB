@@ -3,8 +3,16 @@ import { useState, useEffect, useRef } from "react";
 import { useUser } from "../context/UserContext";
 import toast from 'react-hot-toast'
 
+type tmpUser = {
+    id: number;
+    name: string;
+    account_number: string;
+    balance: number;
+    icon_pass: string;
+};
+
 function Top() {
-    const { user, setUser } = useUser();
+    const { user, setUser } = useUser() as { user: tmpUser | null, setUser: (user: tmpUser) => void };
     const [showBalance, setShowBalance] = useState(true);
     const [unreadCount, setUnreadCount] = useState(0);
     const [showOverdue, setShowOverdue] = useState(false);
@@ -20,16 +28,22 @@ function Top() {
     })());
 
 
+    // 最新のユーザー情報を取得（icon_pass も確実に保つ）
     useEffect(() => {
-        fetch(`http://localhost:5001/api/users/${user?.id}`)  // ← id を指定
+        if (!user?.id) return;
+        fetch(`http://localhost:5001/api/users/${user.id}`)
             .then((res) => res.json())
             .then((data) => {
-                setUser(data)
-                
+                const updatedUser = {
+                    ...data,
+                    icon_pass: data.icon_pass,
+                };
+                setUser(updatedUser);
             })
             .catch((err) => console.error("Error fetching user:", err));
+    }, [user?.id]);
 
-    }, [user]);
+    // 未読件数・未払い請求（30秒経過）アラート計算
     useEffect(() => {
         const calc = () => {
             try {
@@ -137,8 +151,8 @@ function Top() {
                 <div className="flex items-center w-full max-w-md p-4">
                     {/* ユーザー画像 */}
                     <img
-                        src="/assets/images/icons/human1.png"
-                        alt="ユーザー画像"
+                        src={user?.icon_pass}
+                        alt={user?.name}
                         className="w-1/2 h-auto h-16 rounded-full"
                     />
 
@@ -210,7 +224,7 @@ function Top() {
                 >
                     {/* 中央にテキスト */}
                     <span className="absolute left-1/2 transform -translate-x-1/2">
-                        履歴
+                        請求履歴
                     </span>
 
                     {/* 右にアイコン */}

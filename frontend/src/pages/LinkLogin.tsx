@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
+import toast from 'react-hot-toast'
 
 function LinkLogin() {
     const [accountNumber, setAccountNumber] = useState("");
     const { user, setUser } = useUser();
-    const navigate = useNavigate();  // 画面遷移用
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // URLクエリからidを取得
+    const [linkId, setLinkId] = useState<string | null>(null);
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const id = params.get("id");
+        setLinkId(id);
+    }, [location.search]);
 
     const handleLogin = async () => {
         try {
@@ -20,24 +29,29 @@ function LinkLogin() {
 
             if (!res.ok) {
                 const error = await res.json();
-                alert(error.error || "エラーが発生しました");
+                toast.error(error.error || "エラーが発生しました");
                 return;
             }
 
             const data = await res.json();
-
             setUser({
                 id: data.id,
                 account_number: data.account_number,
                 name: data.name,
                 balance: data.balance,
             });
-            alert(`ようこそ ${data.name} さん！ 残高: ${data.balance}円`);
-            // ここで画面遷移
-            navigate("/link-send");
+
+            toast.success(`ようこそ ${data.name} さん！`);
+
+            // linkId があれば /recieve に遷移
+            if (linkId) {
+                navigate(`/recieve?id=${linkId}`);
+            } else {
+                navigate("/top");
+            }
         } catch (err) {
             console.error(err);
-            alert("サーバーエラーが発生しました");
+            toast.error("サーバーエラーが発生しました");
         }
     };
 

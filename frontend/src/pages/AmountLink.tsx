@@ -1,26 +1,57 @@
-// frontend/src/pages/AmountLink.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
+import { useUser } from "../context/UserContext"; // ← ログインユーザー情報取得
 
 function AmountLink() {
   const navigate = useNavigate();
+  const { user } = useUser(); // sender_id を取得
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const formatNumber = (n: number) => n.toLocaleString("ja-JP");
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!amount) return;
-    const yen = Number(String(amount).replace(/,/g, ""));
-    // request の画面に「送金リンク作成用のデータ」として渡す
-    navigate("/request", { state: { mode: "send-link", amount: yen, message } });
+    if (!amount || !user) return;
+
+    const numericAmount = Number(amount.replace(/,/g, ""));
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:5001/api/request-links", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sender_id: user.id,
+          amount: numericAmount,
+          message,
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        alert(errData.error || "送金リンク作成に失敗しました");
+        setLoading(false);
+        return;
+      }
+
+      const data = await res.json();
+      const linkId = data.id;
+
+      // 作成後は /create-link?id={linkId} に遷移
+      navigate(`/link-send?id=${linkId}`);
+    } catch (err) {
+      console.error(err);
+      alert("送金リンク作成中にサーバーエラーが発生しました");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="mx-auto h-screen bg-orange-50 shadow-lg overflow-hidden flex flex-col">
-      {/* Recipients系と同じトーン（rose色） */}
       <header className="bg-rose-400 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
         <div className="w-6">
           <BackButton />
@@ -31,7 +62,6 @@ function AmountLink() {
 
       <div className="flex-grow px-6 py-6">
         <form className="space-y-4" onSubmit={onSubmit}>
-          {/* 金額 */}
           <div>
             <label htmlFor="amount" className="block text-sm font-medium text-gray-500 mb-1 ml-1">
               送金額
@@ -56,7 +86,6 @@ function AmountLink() {
             </div>
           </div>
 
-          {/* メッセージ（任意） */}
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-gray-500 mb-1 ml-1">
               メッセージ(任意)
@@ -70,18 +99,17 @@ function AmountLink() {
             />
           </div>
 
-          {/* 作成ボタン */}
           <div className="mt-6">
             <button
               type="submit"
-              disabled={!amount}
+              disabled={!amount || loading}
               className={`w-full font-bold p-4 rounded-md shadow-lg transition-colors duration-200 ${
                 amount
                   ? "bg-rose-500 text-white hover:bg-rose-600"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-              送金リンクを作成する
+              {loading ? "作成中..." : "送金リンクを作成する"}
             </button>
           </div>
         </form>

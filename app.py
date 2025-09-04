@@ -189,6 +189,74 @@ def link_send_money():
         cursor.close()
         conn.close()
 
+# 請求リンクから送金（受け取り用）
+@app.route("/api/claim-link", methods=["POST"])
+def claim_link():
+    data = request.get_json()
+    link_id = data.get("link_id")
+    receiver_num = data.get("receiver_num")  # ログイン中のユーザー
+    message = data.get("message", "")
+
+    if not link_id or not receiver_num:
+        return jsonify({"error": "link_idとreceiver_numが必要です"}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("BEGIN")  # トランザクション開始
+
+        # 請求リンク情報取得
+        cursor.execute("SELECT sender_id, amount, status FROM request_links WHERE id = ?", (link_id,))
+        link_row = cursor.fetchone()
+        if not link_row:
+            return jsonify({"error": "リンクが存在しません"}), 404
+
+        sender_id, amount, status = link_row
+        if status == "Done":
+            return jsonify({"error": "すでに受け取られています"}), 400
+
+        # sender の残高確認
+        cursor.execute("SELECT account_number, balance FROM users WHERE id = ?", (sender_id,))
+        sender_row = cursor.fetchone()
+        if not sender_row:
+            return jsonify({"error": "送信者が存在しません"}), 404
+
+        sender_account, sender_balance = sender_row
+        if sender_balance < amount:
+            return jsonify({"error": "送信者の残高不足"}), 400
+
+        # receiver の残高確認
+        cursor.execute("SELECT balance FROM users WHERE account_number = ?", (receiver_num,))
+        receiver_row = cursor.fetchone()
+        if not receiver_row:
+            return jsonify({"error": "受取者が存在しません"}), 404
+
+        # 残高更新
+        cursor.execute("UPDATE users SET balance = balance - ? WHERE account_number = ?", (amount, sender_account))
+        cursor.execute("UPDATE users SET balance = balance + ? WHERE account_number = ?", (amount, receiver_num))
+
+        # 送金履歴に記録
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        cursor.execute(
+            "INSERT INTO send_histories (sender_num, receiver_num, datetime, amount, message) VALUES (?, ?, ?, ?, ?)",
+            (sender_account, receiver_num, now, amount, message)
+        )
+
+        # リンクステータス更新
+        cursor.execute("UPDATE request_links SET status = 'Done' WHERE id = ?", (link_id,))
+
+        conn.commit()
+        return jsonify({"status": 0, "message": f"{amount}円を受け取りました", "amount": amount, "sender_num": sender_account})
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
 
 
 @app.route("/api/request-links", methods=["POST"])
