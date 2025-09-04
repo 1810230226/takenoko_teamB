@@ -3,21 +3,33 @@ import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import toast from 'react-hot-toast'
 
+type tmpUser = {
+    id: number;
+    name: string;
+    account_number: string;
+    balance: number;
+    icon_pass: string;
+};
+
 function Top() {
-    const { user, setUser } = useUser();
+    const { user, setUser } = useUser() as { user: tmpUser | null, setUser: (user: tmpUser) => void };
     const [showBalance, setShowBalance] = useState(true);
 
 
     useEffect(() => {
-        fetch(`http://localhost:5001/api/users/${user?.id}`)  // ← id を指定
-            .then((res) => res.json())
-            .then((data) => {
-                setUser(data)
-                
-            })
-            .catch((err) => console.error("Error fetching user:", err));
-
-    }, [user]);
+    fetch(`http://localhost:5001/api/users/${user?.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+            // APIレスポンスに`icon_pass`が含まれていることを前提として、
+            // 新しいオブジェクトを作成してセットする
+            const updatedUser = {
+                ...data,
+                icon_pass: data.icon_pass,
+            };
+            setUser(updatedUser);
+        })
+        .catch((err) => console.error("Error fetching user:", err));
+}, [user]);
 
     return (
         <>
@@ -25,8 +37,8 @@ function Top() {
                 <div className="flex items-center w-full max-w-md p-4">
                     {/* ユーザー画像 */}
                     <img
-                        src="/assets/images/icons/human1.png"
-                        alt="ユーザー画像"
+                        src={user?.icon_pass}
+                        alt={user?.name}
                         className="w-1/2 h-auto h-16 rounded-full"
                     />
 
