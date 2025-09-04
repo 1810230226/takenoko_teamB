@@ -107,7 +107,7 @@ useEffect(() => {
 
     return (
         <div className="mx-auto h-screen bg-orange-50 flex flex-col">
-            <header className="bg-rose-400 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
+            <header className="bg-cyan-600 text-white p-4 text-lg font-bold grid grid-cols-[auto_1fr_auto] items-center">
                 <div className="w-6"><BackButton /></div>
                 <h1 className="text-center">受け取る</h1>
                 <div className="w-6" aria-hidden />
