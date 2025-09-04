@@ -11,7 +11,7 @@ function Finish() {
     const { recipientName } = location.state || {};
     const { amount } = location.state || {};
 
-  // 金額を3桁ごとにカンマ区切り
+  // 金額を3桁ごとにカンマ区切りにフォーマット
     const formattedAmount = amount.toLocaleString();
 
     return (
