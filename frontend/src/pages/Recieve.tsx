@@ -96,7 +96,7 @@ useEffect(() => {
 
             const data = await res.json();
             setUser({ ...user!, balance: user!.balance - numericAmount });
-            navigate("/complete-recieve", { state: { recipientName: recipient.name, amount: numericAmount } });
+            navigate("/finish", { state: { recipientName: recipient.name, amount: numericAmount } });
         } catch (err) {
             console.error(err);
             alert("サーバーエラー");

@@ -15,7 +15,7 @@ import Create_link from "./pages/Create_link";
 import Link_login from "./pages/Link_login";
 import Remit from "./pages/Remit";
 import Recieve from "./pages/Recieve";
-import finish from "./pages/finish";
+import Finish from "./pages/Finish";
 
 import RequestRecipients from "./pages/RequestRecipients";
 import RequestAmount from "./pages/RequestAmount";
@@ -48,7 +48,7 @@ function App() {
           <Route path="/amount/link" element={<AmountLink />} />
           <Route path="/linklogin" element={<LinkLogin />} />
           <Route path="/recieve" element={<Recieve />} />
-          <Route path="/finish" element={<finish />} />
+          <Route path="/finish" element={<Finish />} />
         </Routes>
         <Toaster position="top-center" />
       </BrowserRouter>

@@ -83,7 +83,7 @@ const handleGoTop = () => {
           <p className="mt-4 text-4xl font-semibold text-gray-800">
             {amount?.toLocaleString()} 円
           </p>
-          <p className="mt-2 text-base text-gray-500">請求リンクが作成されました</p>
+          <p className="mt-2 text-base text-gray-500">送信リンクが作成されました</p>
         </div>
       </div>
 
