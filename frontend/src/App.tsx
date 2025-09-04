@@ -14,43 +14,46 @@ import LinkSend from "./pages/LinkSend";
 import Create_link from "./pages/Create_link";
 import Link_login from "./pages/Link_login";
 import Remit from "./pages/Remit";
+import Recieve from "./pages/Recieve";
+import finish from "./pages/finish";
 
 import RequestRecipients from "./pages/RequestRecipients";
 import RequestAmount from "./pages/RequestAmount";
 import AmountLink from "./pages/AmountLink";
 import MessageRecipients from "./pages/MessageRecipients";
 
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
-    return (
-
-        <UserProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/request/recipients" element={<RequestRecipients />} />
-                    <Route path="/request/amount" element={<RequestAmount />} />
-                    <Route path="/top" element={<Top />} />
-                    <Route path="/top2" element={<Top2 />} />
-                    <Route path="/recipients" element={<Recipients />} />
-                    <Route path="/amount" element={<Amount />} />
-                    <Route path="/complete" element={<Complete />} />
-                    <Route path="/request" element={<Request />} />
-                    <Route path="/histories" element={<TransactionHistory />} />
-                    <Route path="/messages" element={<ChatScreen />} />
-                    <Route path="/" element={<Login />} />
-                    <Route path="/link-login" element={<Link_login />} />
-                    <Route path="/link-send" element={<LinkSend />} />
-                    <Route path="/create-link" element={<Create_link />} />
-                    <Route path="/messages/recipients" element={<MessageRecipients />} />
-                    <Route path="/remit" element={<Remit />} />
-
-                </Routes>
-                <Toaster position="top-center" />
-            </BrowserRouter>
-        </UserProvider>
-
-    );
+  return (
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/request/recipients" element={<RequestRecipients />} />
+          <Route path="/request/amount" element={<RequestAmount />} />
+          <Route path="/top" element={<Top />} />
+          <Route path="/top2" element={<Top2 />} />
+          <Route path="/recipients" element={<Recipients />} />
+          <Route path="/amount" element={<Amount />} />
+          <Route path="/complete" element={<Complete />} />
+          <Route path="/request" element={<Request />} />
+          <Route path="/histories" element={<TransactionHistory />} />
+          <Route path="/messages" element={<ChatScreen />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/link-login" element={<Link_login />} />
+          <Route path="/link-send" element={<LinkSend />} />
+          <Route path="/create-link" element={<Create_link />} />
+          <Route path="/messages/recipients" element={<MessageRecipients />} />
+          <Route path="/remit" element={<Remit />} />
+          <Route path="/amount/link" element={<AmountLink />} />
+          <Route path="/linklogin" element={<LinkLogin />} />
+          <Route path="/recieve" element={<Recieve />} />
+          <Route path="/finish" element={<finish />} />
+        </Routes>
+        <Toaster position="top-center" />
+      </BrowserRouter>
+    </UserProvider>
+  );
 }
 
 export default App;
