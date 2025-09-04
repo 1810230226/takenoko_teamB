@@ -368,6 +368,107 @@ def get_history(user_num):
     )
 
 
+# 以下追加場所 #
+@app.route("/api/claim_message", methods=["POST"])
+def claim_message():
+    data = request.get_json()
+    sender_num = data.get("sender_num")
+    receiver_num = data.get("receiver__num")
+    link = data.get("link")
+    date = data.get("datetime")
+    amount = data.get("amount")
+    message = data.get("message", "")
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # インプットの送金側が履歴でも送金側なものを取得
+    sender_sender = cur.execute("SELECT * FROM send_histories WHERE sender_num = ? AND receiver_num= ?", (sender_num, receiver_num)).fetchall()
+    # インプットの送金側が履歴で請求側なものを取得
+    sender_receiver = cur.execute("SELECT * FROM send_histories WHERE sender_num = ? AND receiver_num= ?", (receiver_num, sender_num)).fetchall()
+
+    return_sender = [[0 for _ in range(len(sender_sender[0]))] for _ in range(len(sender_sender))]
+    return_receiver = [[0 for _ in range(len(sender_receiver[0]))] for _ in range(len(sender_receiver))]
+
+    for i in range(len(sender_sender)):
+        row = sender_sender[i]
+        for j in range(len(row)):
+            return_sender[i][j] = row[j]
+        
+        name0 = cur.execute(
+                "SELECT name FROM users WHERE account_number = ?", (row[0],)
+            ).fetchone()
+        return_sender[i][0] = name0[0]
+
+        name1 = cur.execute(
+                "SELECT name FROM users WHERE account_number = ?", (row[1],)
+            ).fetchone()
+        return_sender[i][1] = name1[0]
+
+        return_sender[i].append(1)
+
+    for i in range(len(sender_receiver)):
+        row = sender_receiver[i]
+        for j in range(len(row)):
+            return_receiver[i][j] = row[j]
+        
+        name0 = cur.execute(
+                "SELECT name FROM users WHERE account_number = ?", (row[0],)
+            ).fetchone()
+        return_receiver[i][0] = name0
+
+        name1 = cur.execute(
+                "SELECT name FROM users WHERE account_number = ?", (row[1],)
+            ).fetchone()
+        return_receiver[i][1] = name1
+
+        return_receiver[i].append(0)
+
+    """
+    # datetime列（index=1）を基準にソート
+    return_sender.sort(
+        key=lambda r: datetime.strptime(r[3], "%Y-%m-%d %H:%M:%S")
+    )
+
+    # datetime列（index=1）を基準にソート
+    return_receiver.sort(
+        key=lambda r: datetime.strptime(r[3], "%Y-%m-%d %H:%M:%S")
+    )
+
+    # JSON返却用に datetime を文字列に戻す
+    formatted_sender, formatted_receiver = [], []
+    for row in return_sender:
+        row_copy = row[:]  # 元データを壊さないようコピー
+        row_copy[1] = datetime.strptime(row[1], "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
+        formatted_sender.append(row_copy)
+
+    for row in return_receiver:
+        row_copy = row[:]  # 元データを壊さないようコピー
+        row_copy[1] = datetime.strptime(row[1], "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
+        formatted_receiver.append(row_copy)
+    """
+    return_list = return_sender + return_receiver
+
+    # datetime列（index=3）を基準にソート
+    return_list.sort(
+        key=lambda r: datetime.strptime(r[3], "%Y-%m-%d %H:%M:%S")
+    )
+
+    for row in return_list:
+        row_copy = row[:]  # 元データを壊さないようコピー
+        row_copy[1] = datetime.strptime(row[1], "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
+        return_list.append(row_copy)
+
+
+    # 末尾に最新の請求状況を追加
+    return_list.append([0 for _ in range(len(return_sender[0]) + 1)])
+    return_list[-1] = [sender_num, receiver_num, date, amount, message, 1]
+
+    return Response(
+        json.dumps(return_list, ensure_ascii=False),
+        mimetype="application/json"
+    )
+
 
 if __name__ == "__main__":
     app.run(port=5001, debug=True)
