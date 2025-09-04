@@ -34,7 +34,7 @@ function Login() {
                 name: data.name,
                 balance: data.balance,
             });
-            toast.success(`ようこそ ${user?.name} さん!`);
+            toast.success(`ようこそ ${data.name} さん!`);
             // ここで画面遷移
             navigate("/top");
         } catch (err) {
