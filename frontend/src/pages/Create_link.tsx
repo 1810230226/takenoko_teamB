@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 // import { useSearchParams } from "react-router-dom";
 import { useSearchParams, useNavigate } from "react-router-dom"; 
 import toast from 'react-hot-toast'
+import { Copy } from "lucide-react";
 
 
 function CreateLink() {
@@ -79,7 +80,7 @@ const handleGoTop = () => {
 
         {/* Text Section */}
         <div className="mt-8 text-center">
-          <h1 className="text-xl font-medium text-gray-800">リンク作成完了</h1>
+          <p>{link}</p>
           <p className="mt-4 text-4xl font-semibold text-gray-800">
             {amount?.toLocaleString()} 円
           </p>
@@ -91,9 +92,10 @@ const handleGoTop = () => {
       <div className="mb-8 w-full max-w-sm space-y-4">
         <button
           onClick={handleCopy}
-          className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white py-4 font-medium text-gray-700 shadow-sm transition-colors duration-200 hover:bg-gray-100"
+          className="relative flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white py-4 font-medium text-gray-700 shadow-sm transition-colors duration-200 hover:bg-gray-100"
         >
           <span className="text-base">リンクをコピー</span>
+          <Copy className="absolute right-4 h-5 w-5 text-gray-500" />
           {/* <DocumentDuplicateIcon className="ml-2 h-5 w-5 text-gray-500" /> */}
         </button>
 
