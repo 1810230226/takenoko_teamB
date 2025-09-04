@@ -64,7 +64,8 @@ function Amount() {
         navigate("/complete", {
             state: {
                 recipientName: recipient.name,
-                amount: Number(amount.replace(/,/g, ""))
+                amount: Number(amount.replace(/,/g, "")),
+                iconPath: recipient.icon_pass
             },
         }); // complete画面に遷移
     };
