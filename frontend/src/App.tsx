@@ -51,7 +51,7 @@ function App() {
           <Route path="/linklogin" element={<LinkLogin />} />
           <Route path="/recieve" element={<Recieve />} />
           <Route path="/finish" element={<Finish />} />
-          <Route path="/request/complete" element={<RequestComplete />} />
+          <Route path="/request/complete" element={<RequestComplete />} /> */
         </Routes>
         <Toaster position="top-center" />
       </BrowserRouter>
