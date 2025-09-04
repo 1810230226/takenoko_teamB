@@ -21,6 +21,7 @@ import AmountLink from "./pages/AmountLink";
 import MessageRecipients from "./pages/MessageRecipients";
 
 import toast, { Toaster } from 'react-hot-toast'
+import RequestComplete from "./pages/RequestComplete";
 
 function App() {
     return (
@@ -45,6 +46,7 @@ function App() {
                     <Route path="/messages/recipients" element={<MessageRecipients />} />
                     <Route path="/remit" element={<Remit />} />
                     <Route path="/amount/link" element={<AmountLink />} />
+                    <Route path="/request/complete" element={<RequestComplete />} />
 
                 </Routes>
                 <Toaster position="top-center" />

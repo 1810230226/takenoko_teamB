@@ -18,6 +18,16 @@ function Remit() {
 
     // URL パラメータ id を取得
     const [linkId, setLinkId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const s = (location.state as any) || {};
+        if (s?.recipient && s?.amount) {
+            setRecipient(s.recipient);
+            setAmount(Number(s.amount).toLocaleString());
+            setLinkId(null);
+        }
+    }, [location.state]);
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const id = params.get("id");
@@ -36,8 +46,12 @@ function Remit() {
         }
     }, [location.search]);
 
-    // linkId から送金先と金額を取得
+// linkId から送金先と金額を取得
 useEffect(() => {
+  // ナビゲーション state に recipient/amount があれば、リンク取得はスキップ
+  const s = (location.state as any) || {};
+  if (s?.recipient && s?.amount) return;
+
   const params = new URLSearchParams(location.search);
   const id = params.get("id");
   if (!id) return;
@@ -63,7 +77,7 @@ useEffect(() => {
   };
 
   fetchLinkData();
-}, [location.search]);
+}, [location.search, location.state]);
 
 
     const formatNumber = (num: number) => num.toLocaleString("ja-JP");
